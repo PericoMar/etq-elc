@@ -1,0 +1,36 @@
+.shop-management{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+}
+
+h1{
+    margin: 0px;
+}
+
+div.option{
+    background-color: rgb(241, 240, 240);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px;
+    margin: 15px;
+    width: 500px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+div.option:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+header{
+    display: flex;
+
+}
+
+.img-management{
+    width: 40px;
+    margin: 8px;
+}

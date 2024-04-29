@@ -1,0 +1,444 @@
+section.products{
+    margin: 40px 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+header{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img.cart{
+    width: 35px;
+    margin: 6px;
+}
+
+.options{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 80px;
+    margin-bottom: 20px;
+}
+
+button.table-opt{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.options button.table-opt{
+    font-family: "Lexend Deca", sans-serif , 'Courier New', Courier, monospace , system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;;
+    margin:3px;
+    height: 36px;
+    border-radius: 4px;
+    border: 2px solid #0056b3;
+    transition: background-color 0.3s;
+    background-color:white ;
+    color: #0056b3;
+    cursor: pointer;
+}
+
+.options button.table-opt:hover {
+    background-color: #0056b3; /* Cambia el color de fondo al azul */
+    color: white; /* Cambia el color del texto a blanco */
+}
+
+.add-opts{
+    display:flex;
+    align-items: center;
+}
+
+.options button.add-product{
+    width: 150px;
+}
+
+.filter-opt{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.options button.filter{
+    width: 90px;
+}
+
+.options button.delete-filter{
+    width: 120px;
+}
+
+.add-opts button.add-excel{
+    width: 240px;
+}
+
+ /* MODAL */
+
+.modal {
+    display: none; /* Ocultar por defecto */
+    position: fixed; /* Posición fija */
+    z-index: 1; /* Situar por encima de otros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Habilitar scroll si el contenido es demasiado grande */
+    background-color: rgba(0,0,0,0.4); /* Fondo semi-transparente */
+}
+
+.modal .inform-modal{
+    display:block;
+}
+
+.modal-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+/* Estilos para el contenido del modal */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 40px 80px;
+    border: 1px solid #888;
+    width: 80%;
+    min-height: 600px;
+}
+
+.modal-content.confirmation-modal, .modal-content.inform-modal{
+    padding: 25px 40px;
+    margin: 5% auto;
+    width: 600px;
+    min-height: 240px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.modal-content.excel-modal{
+    width: 700px;
+    font-size: small;
+}
+
+.modal-content.excel-modal h3{
+    font-size: medium;
+}
+
+.modal-content select{
+    box-sizing: border-box;
+    color: #191919;
+    padding: 5px;
+    width: 20%;
+    font-family: "Lexend Deca", sans-serif , 'Courier New', Courier, monospace , system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin-left: 5px;
+}
+
+.modal-content.excel-modal table th, .modal-content.excel-modal table td{
+    font-size: xx-small;
+}
+
+.modal-header h3{
+    margin:0;
+}
+
+.modal-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.modal-form input{
+    box-sizing: border-box;
+    color: #191919;
+    padding: 10px 10px 10px 10px;
+    width: 100%;
+    font-family: "Lexend Deca", sans-serif , 'Courier New', Courier, monospace , system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 6px 0px 20px 0px;
+}
+
+.modal-form select{
+    box-sizing: border-box;
+    color: #191919;
+    padding: 10px 10px 10px 10px;
+    width: 100%;
+    font-family: "Lexend Deca", sans-serif , 'Courier New', Courier, monospace , system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 6px 0px 20px 0px;
+}
+
+.rango-precio{
+    display:flex;
+    align-items: center;
+}
+
+.rango-precio input{
+    margin-left: 8px;
+}
+
+.rango-precio label{
+    margin-bottom: 8px;
+}
+
+
+.rango-precio label.hasta{
+    margin-left: 8px;
+}
+
+button.confirm-btn{
+    font-family: "Lexend Deca", sans-serif , 'Courier New', Courier, monospace , system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;;
+    height: 36px;
+    border-radius: 4px;
+    border: 2px solid #0056b3;
+    transition: background-color 0.3s;
+    background-color:white ;
+    color: #0056b3;
+    cursor: pointer;
+    width:90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button.confirm-btn:hover {
+    background-color: #0056b3; /* Cambia el color de fondo al azul */
+    color: white; /* Cambia el color del texto a blanco */
+}
+
+button[disabled] {
+    cursor: not-allowed; /* Cambia el cursor a 'no permitido' cuando está deshabilitado */
+    opacity: 0.5; /* Reduce la opacidad cuando está deshabilitado */
+}
+
+button:hover[disabled] {
+    background-color: #0056b3; /* Cambia el color de fondo al azul */
+    color: white; /* Cambia el color del texto a blanco */
+}
+
+.modal-footer{
+    margin-top:24px;
+    align-self: end;
+    display:flex;
+    align-items: center;
+}
+
+.loading-modal{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 200px;
+}
+
+/* Estilos para el contenedor del spinner */
+.loading-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1); /* Color del borde */
+    border-top: 4px solid var(--app); /* Color del borde superior */
+    border-radius: 50%; /* Forma circular */
+    width: 50px; /* Tamaño del spinner */
+    height: 50px; /* Tamaño del spinner */
+    animation: spin 1s linear infinite; /* Animación */
+    margin: auto auto; /* Centrar horizontalmente */
+}
+
+/* Animación de rotación */
+@keyframes spin {
+    0% { transform: rotate(0deg); } /* Inicio */
+    100% { transform: rotate(360deg); } /* Rotación completa */
+}
+
+
+/* Estilos para el botón de cierre */
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.campo-obligatorio{
+    color : rgb(190, 0, 0);
+    font-size: large;
+}
+
+.alert-msg{
+    margin-right: 8px;
+    color:rgb(190, 0, 0);
+    font-size:medium;
+}
+
+.small{
+    font-size:small;
+}
+
+ /* TABLA PRODUCTOS */
+table {
+    margin-top: 8px;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 4px 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd; 
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    font-size: small;
+}
+
+td{
+    font-size:small;
+}
+
+td.acciones{
+    height: 100%;
+    margin:auto;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+main button{
+    font-family: "Lexend Deca", sans-serif , 'Courier New', Courier, monospace , system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;;
+    margin:3px;
+}
+
+/* Estilos para los botones */
+.btn-editar, .btn-eliminar, .btn-cancel , .btn-confirm, .btn-paginacion{
+    height: 36px;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    font-size:small;
+}
+
+.btn-editar {
+    background-color:#007bff;
+    color: white;
+    width: 75px;
+}
+
+.btn-eliminar {
+    padding: 0px;
+    background-color: #e40101 ;
+    color: white;
+    width: 36px;
+}
+
+.btn-editar:hover {
+    background-color: #0056b3;
+}
+
+.btn-eliminar:hover{
+    background-color:rgb(190, 0, 0);
+}
+
+.btn-confirm{
+    background-color: #0056b3;
+    color:white;
+}
+
+.btn-confirm:hover{
+    background-color: #002f61;
+}
+
+.btn-cancel, .btn-paginacion{
+    background-color: white;
+    color: #0056b3;
+    border: 2px solid #0056b3;
+    border-radius: 4px;
+}
+
+.btn-cancel:hover, .btn-paginacion:hover{
+    background-color: #0056b3;
+    color: white;
+}
+
+
+.btn-paginacion{
+    text-decoration: none;
+}
+
+.btn-paginacion.active{
+    background-color: #0056b3;
+    color: white;
+    cursor: default;
+}
+
+/* Botón Seleccionar archivo: */
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.inputfile + label {
+    max-width: 80%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.625rem 1.25rem;
+    border-radius: 4px;
+}
+
+.inputfile + label svg {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    fill: currentColor;
+    margin-top: -0.25em;
+    margin-right: 0.25em;
+}
+
+.iborrainputfile {
+	font-size:15px; 
+	font-weight:normal;
+	font-family: "Lexend Deca", sans-serif , 'Courier New', Courier, monospace , system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;;
+}
+
+.inputfile-1 + label {
+    color: #fff;
+    background-color: #0056b3;
+}
+
+.inputfile-1:focus + label,
+.inputfile-1.has-focus + label,
+.inputfile-1 + label:hover {
+    background-color: #002b59;
+}
+
+
+
+footer.footer-paginacion{
+    margin: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
