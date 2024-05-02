@@ -1,21 +1,15 @@
 <dialog id="add" class="modal">
                 <div class="modal-content" id="modal-content-add">
                     <header class="modal-header">
-                        <h3>Rellene al menos los campos obligatorios antes de añadir un producto:</h3>
+                        <h3>Añadir producto</h3>
                         <span data-modal="add" class="close">&times;</span>
                     </header>
                     <form action="<?php echo $this->baseUrl?>/gestion-productos/" method="post" id="filterForm" class="modal-form">
+                        <label for="etiqueta_add">Etiqueta asociada: <span class="campo-obligatorio">*</span></label>
+                        <input type="text" id="etiqueta_add" name="etiqueta" placeholder="Ej: 803907294" id="etiqueta_add">
+
                         <label for="codigo_barras_add">Código de barras: <span class="campo-obligatorio">*</span></label>
                         <input type="text" id="codigo_barras_add" name="codigo_barras" placeholder="Ej: 8412345678905">
-
-                        <label for="codigo_producto_add">Código de producto:</label>
-                        <input type="text" id="codigo_producto_add" name="codigo_producto" placeholder="Ej: 111">
-
-                        <label for="nombre_corto_add">Nombre corto:</label>
-                        <input type="text" id="nombre_corto_add" name="nombre_corto" placeholder="Ej: Hacendado azucar blanquilla">
-
-                        <label for="nombre_articulo_add">Nombre del artículo:</label>
-                        <input type="text" id="nombre_articulo_add" name="nombre_articulo" placeholder="Ej: Hacendado azucar blanquilla 1Kg">
 
                         <label for="disenio_asociado_add">Diseño asociado: <span class="campo-obligatorio">*</span></label>
                         <select id="disenio_asociado_add" name="disenio_asociado">
@@ -28,14 +22,20 @@
                         ?>
                         </select>
 
+                        <label for="codigo_producto_add">Código de producto:</label>
+                        <input type="text" id="codigo_producto_add" name="codigo_producto" placeholder="Ej: 111">
+
+                        <label for="nombre_corto_add">Nombre corto:</label>
+                        <input type="text" id="nombre_corto_add" name="nombre_corto" placeholder="Ej: Hacendado azucar blanquilla">
+
+                        <label for="nombre_articulo_add">Nombre del artículo:</label>
+                        <input type="text" id="nombre_articulo_add" name="nombre_articulo" placeholder="Ej: Hacendado azucar blanquilla 1Kg">
+
                         <label for="precio-inicial_add">Precio inicial:</label>
                         <input type="text" id="precio-inicial_add" name="precio-inicial" placeholder="Ej: 10.00" pattern="\d+([,.]\d{1,2})?|^$">
 
                         <label for="precio-venta_add">Precio venta:</label>
                         <input type="text" id="precio-venta_add" name="precio-venta" placeholder="Ej: 8.00" pattern="\d+([,.]\d{1,2})?|^$">
-
-                        <label for="etiqueta_add">Etiqueta asociada: <span class="campo-obligatorio">*</span></label>
-                        <input type="text" id="etiqueta_add" name="etiqueta" placeholder="Ej: 803907294" id="etiqueta_add">
 
                         <label for="info_extra_add">Información extra:</label>
                         <input type="text" id="info_extra_add" name="info_extra" placeholder="Ej: Paquete color blanco">

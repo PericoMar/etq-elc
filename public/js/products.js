@@ -33,6 +33,31 @@ btnAddExcel.addEventListener("click" , () => {
     showModal(addExcelModal);
 })
 
+// Control filter modal:
+
+const agregarFiltroBtn = document.getElementById('agregarFiltroBtn');
+const nuevoFiltroSelect = document.getElementById('nuevo_filtro');
+const addFilterDiv = document.getElementById('add-filter');
+const labelNuevoFiltro = document.getElementById('label-nuevo-filtro');
+
+agregarFiltroBtn.addEventListener('click', function() {
+    // Obtener el valor seleccionado en el select
+    const nuevoFiltro = nuevoFiltroSelect.value;
+
+    // Mostrar el campo correspondiente al nuevo filtro
+    const campoFiltro = document.getElementById('div_' + nuevoFiltro + '_filter');
+    campoFiltro.style.display = 'block';
+
+    // Remover el nuevo filtro del select para evitar duplicados
+    nuevoFiltroSelect.remove(nuevoFiltroSelect.selectedIndex);
+
+    if(nuevoFiltroSelect.length < 1){
+        addFilterDiv.style.display = 'none';
+        labelNuevoFiltro.style.display = 'none';
+    }
+});
+
+
 
 // Control no se puede añadir sin tener los campos obligatorios rellenos:
 
@@ -104,19 +129,21 @@ const botonesEditar = document.querySelectorAll('.btn-editar');
 botonesEditar.forEach(function(boton) {
     boton.addEventListener('click', function() {
       const fila = this.closest('tr');
-      const codigoBarras = fila.querySelector('td:nth-child(1)').textContent;
-      const codigoProducto = fila.querySelector('td:nth-child(2)').textContent;
-      const nombreCorto = fila.querySelector('td:nth-child(3)').textContent;
-      const nombreArticulo = fila.querySelector('td:nth-child(4)').textContent;
-      const disenoId = fila.querySelector('td:nth-child(5)').textContent;
-      const precioInicial = fila.querySelector('td:nth-child(6)').textContent != 0 ? fila.querySelector('td:nth-child(6)').textContent : "";
-      const precioVenta = fila.querySelector('td:nth-child(7)').textContent != 0 ? fila.querySelector('td:nth-child(7)').textContent : "";
-      const infoExtra = fila.querySelector('td:nth-child(8)').textContent;
+      const etiqueta = fila.querySelector('td:nth-child(1)').textContent;
+      const codigoBarras = fila.querySelector('td:nth-child(2)').textContent;
+      const codigoProducto = fila.querySelector('td:nth-child(3)').textContent;
+      const nombreCorto = fila.querySelector('td:nth-child(4)').textContent;
+      const nombreArticulo = fila.querySelector('td:nth-child(5)').textContent;
+      const disenoId = fila.querySelector('td:nth-child(6)').textContent;
+      const precioInicial = fila.querySelector('td:nth-child(7)').textContent != 0 ? fila.querySelector('td:nth-child(6)').textContent : "";
+      const precioVenta = fila.querySelector('td:nth-child(8)').textContent != 0 ? fila.querySelector('td:nth-child(7)').textContent : "";
+      const infoExtra = fila.querySelector('td:nth-child(9)').textContent;
 
       const inputHiddenAnteriorCodBarras = document.getElementById("anterior-cod-barras");
       inputHiddenAnteriorCodBarras.value = codigoBarras;
         
       // Llenar los campos del modal de edición con los datos del producto
+      document.getElementById('etiqueta_edit').value = etiqueta;
       document.getElementById('codigo_barras_edit').value = codigoBarras;
       document.getElementById('codigo_producto_edit').value = codigoProducto;
       document.getElementById('nombre_corto_edit').value = nombreCorto;

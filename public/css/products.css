@@ -94,6 +94,7 @@ button.table-opt{
     display:block;
 }
 
+/* El modal del informe se controla con PHP cuando debe de aparecer */
 .modal .inform-modal{
     display:block;
 }
@@ -111,8 +112,13 @@ button.table-opt{
     margin: 5% auto;
     padding: 40px 80px;
     border: 1px solid #888;
-    width: 80%;
+    width: 50%;
     min-height: 600px;
+}
+
+#modal-content-filter{
+    width: 500px;
+    min-height: 200px;
 }
 
 .modal-content.confirmation-modal, .modal-content.inform-modal{
@@ -163,7 +169,7 @@ button.table-opt{
     padding: 10px 10px 10px 10px;
     width: 100%;
     font-family: "Lexend Deca", sans-serif , 'Courier New', Courier, monospace , system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    margin: 6px 0px 20px 0px;
+    margin: 6px 0px 20px 0px;   
 }
 
 .modal-form select{
@@ -191,6 +197,11 @@ button.table-opt{
 
 .rango-precio label.hasta{
     margin-left: 8px;
+}
+
+.add-filter{
+    display:flex;
+    align-items: center;
 }
 
 button.confirm-btn{
@@ -229,6 +240,8 @@ button:hover[disabled] {
     display:flex;
     align-items: center;
 }
+
+
 
 .loading-modal{
     display:flex;
@@ -389,8 +402,25 @@ main button{
 
 .btn-paginacion.active{
     background-color: #0056b3;
-    color: white;
+    color: rgb(255, 255, 255);
     cursor: default;
+}
+
+#agregarFiltroBtn{
+    cursor: pointer;
+    margin: 6px 0px 20px 4px;
+    height: 40px;
+    width:40px;
+    color:white;
+    background-color: var(--edit-btn);
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background-color 0.3s;
+}
+
+#agregarFiltroBtn:hover{
+    background-color: var(--edit-btn-hover);
 }
 
 /* Botón Seleccionar archivo: */

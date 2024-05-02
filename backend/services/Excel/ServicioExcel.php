@@ -45,7 +45,7 @@ class ExcelService
                     continue;
                 }
 
-                if ($rowData[0] === null || $rowData[0] === '') {
+                if ($rowData[0] === null || $rowData[0] === '' || $rowData[1] === null || $rowData[1] === '') {
                     continue;
                 } else {
                     // Crear objeto Articulo

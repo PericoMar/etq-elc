@@ -70,12 +70,12 @@ class Tienda {
         }
     }
 
-    public function tieneEtiquetasAsociadas(){
+    public function tieneArticulosAsociadas(){
         try {
             $conn = $this->conexionBD->getConexion();
     
             // Consulta SQL para verificar si hay artículos asociados a la tienda con etiquetas asignadas
-            $sql = "SELECT COUNT(*) FROM Articulos WHERE store_id = :id AND etiqueta IS NOT NULL";
+            $sql = "SELECT codigo_barras FROM Articulos WHERE store_id = :id;";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':id', $this->id);
             $stmt->execute();

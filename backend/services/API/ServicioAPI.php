@@ -110,8 +110,61 @@ class ServicioAPI {
         return $response;
     }
 
-    public function batchBind(array $productos , $tiendaID){
-        $endpoint = "/item/batchImportItem";
+    public function batchBind($producto , $tiendaID){
+        $endpoint = "/erp/esl/batchBind";
+        $url = $this->baseUrl . $endpoint;
+
+        $loginCrendentials = $this->getLoginCredentials();
+
+        // Encabezados personalizados
+        $headers = array(
+            'Authorization: ' . $loginCrendentials['token'], // Encabezado de autorización.
+            'Content-type: ' . $this->contentType, // Tipo de contenido.
+            $this->language
+        );
+
+        $itemList = [];
+
+        $bindList[] = array(
+            "eslBarCode" => $producto->getPriceTag(),
+            "item" => $producto->getArrayArticulo()
+        );
+
+
+        // Datos a enviar.
+        $data = array(
+            "storeId" => $tiendaID,
+            "unitName" => 0,
+            "bindList" => $bindList
+        );
+
+        // Inicializar cURL
+        $ch = curl_init($url);
+
+        // Configurar opciones de cURL
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Especificar el tipo de solicitud (POST en este ejemplo)
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        // Configurar los datos a enviar (si es una solicitud POST)
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        // Establecer los encabezados personalizados
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        // Ejecutar la solicitud y obtener la respuesta
+        $response = curl_exec($ch);
+
+        
+        // Cerrar la conexión cURL
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function batchBindInBatches(array $productos , $tiendaID){
+        $endpoint = "/erp/esl/batchBind";
         $url = $this->baseUrl . $endpoint;
 
         $loginCrendentials = $this->getLoginCredentials();
@@ -134,11 +187,9 @@ class ServicioAPI {
 
         // Datos a enviar.
         $data = array(
-            "agencyId" => $loginCrendentials['agencyId'],
-            "merchantId" => $loginCrendentials['merchantId'],
             "storeId" => $tiendaID,
             "unitName" => 0,
-            "itemList" => $bindList
+            "bindList" => $bindList
         );
 
         // Inicializar cURL

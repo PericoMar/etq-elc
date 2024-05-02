@@ -140,6 +140,7 @@ class MainController {
     public function gestionProductos(){
         $components = array(
             'first-import-modal' => 'backend/views/components/productsPage/firstImportModal.php',
+            'inform-modal' => 'backend/views/components/productsPage/informModal.php',
             'filter-modal' => 'backend/views/components/productsPage/filterModal.php',
             'add-modal' => 'backend/views/components/productsPage/addModal.php',
             'add-excel-modal' => 'backend/views/components/productsPage/addExcelModal.php',
@@ -173,7 +174,7 @@ class MainController {
 
         $tienda = new Tienda($this->conexionBD, $tiendaId);
 
-        $hayEtiquetasAsociadas = $tienda->tieneEtiquetasAsociadas();
+        $hayEtiquetasAsociadas = $tienda->tieneArticulosAsociadas();
 
         $productos = Articulo::getArticulosPorTienda($this->conexionBD, $_SESSION['shop']);
 
@@ -186,53 +187,12 @@ class MainController {
         $apiService = new ServicioAPI();
 
 
-        // var_dump($apiService->getLoginCredentials());
+        var_dump($apiService->getLoginCredentials());
         var_dump($_SESSION['response']);
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            if(isset($_POST['primer-import'])){
-                if(isset($_FILES['archivoExcel'])) {
-                    try{
-                        // Obtener la información del archivo
-                        $nombreArchivo = $_FILES['archivoExcel']['name'];
-                        $tipoArchivo = $_FILES['archivoExcel']['type'];
-                        $rutaTemporal = $_FILES['archivoExcel']['tmp_name'];
-                        $tamañoArchivo = $_FILES['archivoExcel']['size'];
-                        $errorArchivo = $_FILES['archivoExcel']['error'];
-
-                        // Verificar si no hubo errores al subir el archivo
-                        if ($errorArchivo === UPLOAD_ERR_OK) {
-
-                            // procesarArchivoExcel devuelve falso si el formato es incorrecto:
-                            $productosExcel = $excelService->getProductosArchivoExcel($rutaTemporal, $tiendaId);
-
-                            if($productosExcel){
-                                // Con JS se pone una pantalla de carga cuando se le da click al boton de "Cargar":
-                                $informeNuevo = Articulo::procesarProductos($productosExcel, $tiendaId, $disenioPredeterminado);
-
-                                $response = $apiService->importProducts($productosExcel , $tiendaId);
-
-                                $_SESSION['response'] = $response;
-
-                                $_SESSION['informe'] = $informeNuevo;
-
-                                // Cuando se han procesado todos los productos se redirige a la pagina gestion-productos.
-                                header("Location: /etq-elc/gestion-productos/");
-                                exit();
-                            } else {
-                                $mensaje = "Archivo vacio.";
-                            }
-                        } else {
-                            $mensaje = "Error al leer el archivo.";
-                        }
-                    } catch(Exception $e){
-                        $mensaje = "Se ha producido un error con la lectura del archivo.";
-                    }
-                    
-                }
-            }
             if(isset($_POST['add'])){
-                if (!empty($_POST['codigo_barras']) && !empty($_POST['disenio_asociado'])) {
+                if (!empty($_POST['codigo_barras']) && !empty($_POST['disenio_asociado']) && !empty($_POST['etiqueta'])) {
                     // Obtiene los datos del formulario
                     $codigoBarras = $_POST['codigo_barras'];
                     $disenoId = $_POST['disenio_asociado'];
@@ -243,21 +203,26 @@ class MainController {
                     $precioVenta = isset($_POST['precio-venta']) ? $_POST['precio-venta'] : 0;
                     $etiqueta = isset($_POST['etiqueta']) ? $_POST['etiqueta'] : '';
                     $infoExtra = isset($_POST['info_extra']) ? $_POST['info_extra'] : '';
-            
+                    
                     $articulo = new Articulo($codigoBarras, $tiendaId, $disenoId, $codigoProducto, $nombreCorto, $nombreArticulo, $precioInicial, $precioVenta, $etiqueta, $infoExtra);
-                    $response = $apiService->batchBind($articulo, $tiendaId);
-
-                    $_SESSION['response'] = $response;
 
                     if(!$articulo->articuloExiste()){
+
                         $articulo->aniadirArticulo();
+
+                        $response = $apiService->batchBind($articulo, $tiendaId);
+
+                        $_SESSION['response'] = $response;
+
+                    } else if($articulo->etiquetaEnUso()){
+                        $mensaje = "La etiqueta ya está en uso. Borrala o editala.";
                     } else {
                         $mensaje = "Ya existe un articulo con ese codigo de barras.";
                     }
                 }
             }
             
-            if(isset($_POST['carga-excel'])){
+            if(isset($_POST['carga-excel']) || isset($_POST['primer-import'])){
                 
                 if(isset($_FILES['archivoExcel'])) {
 
@@ -474,10 +439,12 @@ class MainController {
 
     private function productosFiltrados($productos){
         $max_price = 9999999;
+        $etiqueta = isset($_GET['etiqueta']) ? $_GET['etiqueta'] : '';
         $codigo_barras = isset($_GET['codigo_barras']) ? $_GET['codigo_barras'] : '';
         $codigo_producto = isset($_GET['codigo_producto']) ? $_GET['codigo_producto'] : '';
         $nombre_corto = isset($_GET['nombre_corto']) ? $_GET['nombre_corto'] : '';
         $nombre_articulo = isset($_GET['nombre_articulo']) ? $_GET['nombre_articulo'] : '';
+        $disenioAsociado = $_GET['disenio_asociado'];
         $precio_inicial_min = isset($_GET['precio-inicial-desde']) ? floatval($_GET['precio-inicial-desde']) : 0;
         $precio_inicial_max = isset($_GET['precio-inicial-hasta']) && $_GET['precio-inicial-hasta'] != "" ? floatval($_GET['precio-inicial-hasta']) : $max_price;
         $precio_venta_min = isset($_GET['precio-venta-desde']) ? floatval($_GET['precio-venta-desde']) : 0;
@@ -488,10 +455,12 @@ class MainController {
         // Filtrar los productos
         foreach ($productos as $producto) {
             if (
+                stripos($producto['etiqueta'], $etiqueta) !== false &&
                 stripos($producto['codigo_barras'], $codigo_barras) !== false &&
                 stripos($producto['codigo_producto'], $codigo_producto) !== false &&
                 stripos($producto['nombre_corto'], $nombre_corto) !== false &&
                 stripos($producto['nombre_articulo'], $nombre_articulo) !== false &&
+                stripos($producto['id_plantilla'], $disenioAsociado) !== false &&
                 $producto['precio_venta'] >= $precio_venta_min &&
                 $producto['precio_venta'] <= $precio_venta_max &&
                 $producto['precio_inicial'] >= $precio_inicial_min &&
@@ -553,9 +522,7 @@ class MainController {
         }
 
         return $usuariosFiltrados;
-}
-
-
+    }   
 
     // Método para obtener la ruta del CSS según el nombre del método
     private function getCSSRoute($method) {

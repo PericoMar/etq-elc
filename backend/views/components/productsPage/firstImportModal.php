@@ -4,7 +4,7 @@
             <h3>Primera carga a partir de archivo Excel:</h3>
         </header>
         <main class="modal-body">
-            <p>La primera carga nos permite conocer las etiquetas que tienes a tu disposición, además puedes hacer la conexion entre estas y tus productos.</p>
+            <p>La primera carga nos permite conocer las etiquetas que tienes a tu disposición, además de tus productos.</p>
             <p>Recuerda seguir el <b>formato</b> indicado a continuación:</p>
             <table>
                 <tr class="column-letters">
@@ -44,18 +44,6 @@
                     <td>Color: Rojo</td>
                 </tr>
                 <tr>
-                    <th>3</th>
-                    <td>805250802</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
                     <th>4</th>
                     <td>802650313</td>
                     <td>1337252321332</td>
@@ -69,7 +57,17 @@
                 </tr>
                 <!-- Agrega más filas según sea necesario -->
             </table>
-            <p>Si hay alguna fila sin codigo de etiqueta se ignorará.</p>
+            <p>Si hay alguna fila sin codigo de etiqueta o sin codigo de barras se ignorará.</p>
+            <p>Si se intenta seleccionar un diseño no existente se usará el predeterminado.</p>
+            <label for="disenio_predeterminado">Diseño predeterminado:</label>
+            <select name="disenio_predeterminado" id="disenio_predeterminado">
+                <?php
+                foreach ($disenios as $disenio) {
+                    ?><option value='<?php echo $disenio['id_plantilla'] ?>'><?php echo $disenio['id_plantilla'] ?></option>";
+                <?php
+                }
+                ?>
+            </select>
             <p>Nota: La primera fila se ignorará durante la importación.</p>
                 <input type="file" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} archivos seleccionados" name="archivoExcel" accept=".xls,.xlsx" required/>
                 <label for="file-1">
@@ -80,7 +78,7 @@
                 <span class="iborrainputfile">Seleccionar archivo</span>
             </label>
         </main>
-        <footer class="first-import-footer">
+        <footer class="modal-footer">
             <button id="cargaExcel" class="btn-confirm" name="primer-import">Cargar</button>
         </footer>
     </form>

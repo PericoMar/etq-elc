@@ -43,11 +43,6 @@ CREATE TABLE Diseños_Tiendas (
     FOREIGN KEY (store_id) REFERENCES Tiendas(store_id)
 );
 
-CREATE TABLE Etiquetas (
-    id_etiqueta VARCHAR(50),
-    PRIMARY KEY (id_etiqueta)
-);
-
 CREATE TABLE Articulos (
     codigo_barras VARCHAR(50),
     store_id VARCHAR(50),
@@ -60,7 +55,6 @@ CREATE TABLE Articulos (
     etiqueta VARCHAR(50),
     info_extra TEXT,
     PRIMARY KEY (codigo_barras, store_id),
-    FOREIGN KEY (etiqueta) REFERENCES Etiquetas(id_etiqueta),
     FOREIGN KEY (store_id) REFERENCES Tiendas(store_id),
     FOREIGN KEY (id_plantilla) REFERENCES Diseños(id_plantilla)
 );
@@ -84,7 +78,7 @@ CREATE TABLE Articulos (
 
     -- Insertar diseño
     INSERT INTO Diseños (id_plantilla,categoria, tipo, foto, tamano) VALUES
-    (2, 'Ropa', 'Camisetas', 'ruta/foto.jpg', '1.8"');
+    (3, 'default', 'default', 'ruta/foto.jpg', '1.8"');
 
 
     -- Insertar datos en la tabla Usuarios_Tiendas
@@ -96,10 +90,9 @@ CREATE TABLE Articulos (
 
 
     INSERT INTO Diseños_Tiendas (store_id, id_plantilla)
-    VALUES ('1618198065591', 2);
-
-    INSERT INTO Etiquetas (id_etiqueta)
-    VALUES ('1');
+    VALUES 
+    ('1618198065591', 2);
+    ('1618198065591', 3);
 
     -- Insertar artículos
     INSERT INTO Articulos (codigo_barras,store_id,  id_plantilla, codigo_producto, nombre_corto, nombre_articulo, precio_inicial, precio_venta,etiqueta, info_extra) VALUES

@@ -46,8 +46,8 @@
                 <!-- Agrega más filas según sea necesario -->
             </table>
             <p>Si se importa algún producto ya existente, se modificarán sus datos.</p>
-            <p>Si se intenta seleccionar un diseño no existente se usará el predeterminado.</p>
             <p>Si hay alguna fila sin codigo de barras se ignorará.</p>
+            <p>Si se intenta seleccionar un diseño no existente se usará el predeterminado.</p>
             <label for="disenio_predeterminado">Diseño predeterminado:</label>
             <select name="disenio_predeterminado" id="disenio_predeterminado">
                 <?php

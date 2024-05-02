@@ -90,17 +90,21 @@ class Articulo {
                     $producto->setDisenoId($disenioPredeterminado);
                 }
                 
-                // Verificar si el producto ya existe en la base de datos
-                if ($producto->articuloExiste()) {
-                    // Actualizar el producto existente
-                    $producto->editarArticulo();
-
-                    // Añadir el código de barras al informe de productos editados
-                    $informe['editados']++;
+                if($producto->etiquetaEnUso()){
+                    $informe['errores']++;
                 } else {
-                    $producto->aniadirArticulo();
-                    // Añadir el código de barras al informe de productos añadidos
-                    $informe['añadidos']++;
+                    // Verificar si el producto ya existe en la base de datos
+                    if ($producto->articuloExiste()) {
+                        // Actualizar el producto existente
+                        $producto->editarArticulo();
+
+                        // Añadir el código de barras al informe de productos editados
+                        $informe['editados']++;
+                    } else {
+                        $producto->aniadirArticulo();
+                        // Añadir el código de barras al informe de productos añadidos
+                        $informe['añadidos']++;
+                    }
                 }
                 
             }
@@ -227,6 +231,26 @@ class Articulo {
         );
 
         return $arrayArticulo;
+    }
+
+    public function etiquetaEnUso(){
+        try{
+            $conexionBD = new ConexionBD();
+            $conn = $conexionBD->getConexion();
+
+            $sql = "SELECT codigo_barras FROM Articulos WHERE etiqueta = :etiqueta";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':etiqueta', $this->etiqueta);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch(PDOException $e){
+            // Manejar errores de la conexión o de la consulta
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
     }
 
     public function getPriceTag(){

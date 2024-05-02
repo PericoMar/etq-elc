@@ -30,32 +30,7 @@
             <?php include $components['add-excel-modal'] ?>
             <?php
                 if(isset($informe)){
-                    ?>
-                        <dialog id="inform" class="modal inform-modal" style="display:block;">
-                            <div class="modal-content inform-modal">
-                                <header class="modal-header">
-                                    <h3>Informe de importación.</h3>
-                                    <span class="close" data-modal="inform">&times;</span>
-                                </header>
-                                <main class="modal-body">
-                                    <p>Se han añadido <?php echo $informe['añadidos'] ?> productos.</p>
-                                    <p>Se han editado <?php echo $informe['editados'] ?> productos.</p>
-                                    <p>Han ocurrido <?php echo $informe['errores'] ?> errores. 
-                                    <?php 
-                                        if($informe['errores'] > 0){
-                                            ?><span>Posiblemente debido a productos sin cod. de barras</span><?php
-                                        }
-                                    ?>
-                                    </p>
-                                </main>
-                                <footer class="modal-footer">
-                                    <form action="<?php echo $this->baseUrl ?>/gestion-productos/" method=post>
-                                        <button data-modal="inform" class="btn-cancel" type=button>Cerrar</button>
-                                    </form>
-                                </footer>
-                            </div>
-                        </dialog>
-                    <?php
+                    include $components['informe'];
                 }
             ?>
             
@@ -87,6 +62,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>Etiqueta</th>
                     <th>Cod. de barras</th>
                     <th>Cod. de producto</th>
                     <th>Nombre corto</th>
@@ -94,7 +70,6 @@
                     <th>Diseño etiqueta</th>
                     <th>Precio inicial</th>
                     <th>Precio venta</th>
-                    <th>Etiqueta</th>
                     <th>Información extra</th>
                     <th>Acciones</th>
                 </tr>
@@ -102,6 +77,7 @@
             <tbody>
                 <?php foreach ($productosPagina as $producto) : ?>
                     <tr>
+                        <td><?php echo $producto['etiqueta'] ?></td>
                         <td><?php echo $producto['codigo_barras']; ?></td>
                         <td><?php echo $producto['codigo_producto']; ?></td>
                         <td><?php echo $producto['nombre_corto']; ?></td>
@@ -109,7 +85,6 @@
                         <td><?php echo $producto['id_plantilla']?></td>
                         <td><?php echo $producto['precio_inicial']; ?></td>
                         <td><?php echo $producto['precio_venta']; ?></td>
-                        <td><?php echo $producto['etiqueta'] ?></td>
                         <td><?php echo $producto['info_extra']; ?></td>
                         <td class="acciones">
                             <button class="btn-editar product-opt">Editar</button>
