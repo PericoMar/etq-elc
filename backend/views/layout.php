@@ -44,6 +44,9 @@
         </svg>  
     </nav>
     <main>
+        <header class="principal-title">
+            <h1>Etiquetas Electrónicas</h1>
+        </header>
         <!-- Contenido dinámico -->
         <?php include $content; ?>
     </main>

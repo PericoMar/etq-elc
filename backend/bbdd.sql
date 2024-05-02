@@ -98,14 +98,15 @@ CREATE TABLE Articulos (
     INSERT INTO Diseños_Tiendas (store_id, id_plantilla)
     VALUES ('1618198065591', 2);
 
-
+    INSERT INTO Etiquetas (id_etiqueta)
+    VALUES ('1');
 
     -- Insertar artículos
     INSERT INTO Articulos (codigo_barras,store_id,  id_plantilla, codigo_producto, nombre_corto, nombre_articulo, precio_inicial, precio_venta,etiqueta, info_extra) VALUES
-    ('C1', '1618198065591', 2, 'PROD001', 'Camiseta 001', 'Camiseta de algodón', 10.00, 15.00, '' , 'Descripción del artículo 1'),
-    ('C2', '1618198065591', 2, 'PROD002', 'Camiseta 002', 'Camiseta de poliéster', 12.00, 18.00, '' , 'Descripción del artículo 2'),
-    ('C3', '1618198065591', 2, 'PROD003', 'Camiseta 003', 'Camiseta de manga larga', 15.00, 20.00, '' , 'Descripción del artículo 3'),
-    ('C4', '1618198065591', 2, 'PROD004', 'Camiseta 004', 'Camiseta deportiva', 20.00, 25.00, '' , 'Descripción del artículo 4'),
-    ('C5', '1618198065591', 2, 'PROD005', 'Camiseta 005', 'Camiseta de verano', 18.00, 22.00, '' , 'Descripción del artículo 5');
+    ('C1', '1618198065591', 2, 'PROD001', 'Camiseta 001', 'Camiseta de algodón', 10.00, 15.00, '1' , 'Descripción del artículo 1'),
+    ('C2', '1618198065591', 2, 'PROD002', 'Camiseta 002', 'Camiseta de poliéster', 12.00, 18.00, '1' , 'Descripción del artículo 2'),
+    ('C3', '1618198065591', 2, 'PROD003', 'Camiseta 003', 'Camiseta de manga larga', 15.00, 20.00, '1' , 'Descripción del artículo 3'),
+    ('C4', '1618198065591', 2, 'PROD004', 'Camiseta 004', 'Camiseta deportiva', 20.00, 25.00, '1' , 'Descripción del artículo 4'),
+    ('C5', '1618198065591', 2, 'PROD005', 'Camiseta 005', 'Camiseta de verano', 18.00, 22.00, '1' , 'Descripción del artículo 5');
 
 

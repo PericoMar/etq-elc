@@ -1,10 +1,10 @@
-<dialog id="add-excel" class="modal">
-    <form action="<?php echo $this->baseUrl ?>/gestion-productos/" method=post class="modal-content confirmation-modal excel-modal" enctype="multipart/form-data" accept=".xls,.xlsx" id="excel-form">
+<dialog id="first-import" class="modal">
+    <form action="<?php echo $this->baseUrl ?>/gestion-productos/" class="modal-content confirmation-modal excel-modal" method=post enctype="multipart/form-data" accept=".xls,.xlsx" id="first-import-form">
         <header class="modal-header">
-            <h3>Cargar productos a partir de archivo Excel:</h3>
-            <span class="close" data-modal="add-excel">&times;</span>
+            <h3>Primera carga a partir de archivo Excel:</h3>
         </header>
         <main class="modal-body">
+            <p>La primera carga nos permite conocer las etiquetas que tienes a tu disposición, además puedes hacer la conexion entre estas y tus productos.</p>
             <p>Recuerda seguir el <b>formato</b> indicado a continuación:</p>
             <table>
                 <tr class="column-letters">
@@ -43,20 +43,33 @@
                     <td>24.99</td>
                     <td>Color: Rojo</td>
                 </tr>
+                <tr>
+                    <th>3</th>
+                    <td>805250802</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>4</th>
+                    <td>802650313</td>
+                    <td>1337252321332</td>
+                    <td>PROD003</td>
+                    <td>HUGO BOSS</td>
+                    <td>HUGO BOSS 60ML</td>
+                    <td>1</td>
+                    <td>99.99</td>
+                    <td>124.99</td>
+                    <td></td>
+                </tr>
                 <!-- Agrega más filas según sea necesario -->
             </table>
-            <p>Si se importa algún producto ya existente, se modificarán sus datos.</p>
-            <p>Si se intenta seleccionar un diseño no existente se usará el predeterminado.</p>
-            <p>Si hay alguna fila sin codigo de barras se ignorará.</p>
-            <label for="disenio_predeterminado">Diseño predeterminado:</label>
-            <select name="disenio_predeterminado" id="disenio_predeterminado">
-                <?php
-                foreach ($disenios as $disenio) {
-                    ?><option value='<?php echo $disenio['id_plantilla'] ?>'><?php echo $disenio['id_plantilla'] ?></option>";
-                <?php
-                }
-                ?>
-            </select>
+            <p>Si hay alguna fila sin codigo de etiqueta se ignorará.</p>
             <p>Nota: La primera fila se ignorará durante la importación.</p>
                 <input type="file" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} archivos seleccionados" name="archivoExcel" accept=".xls,.xlsx" required/>
                 <label for="file-1">
@@ -67,10 +80,8 @@
                 <span class="iborrainputfile">Seleccionar archivo</span>
             </label>
         </main>
-        <footer class="modal-footer">
-            <button data-modal="add-excel" class="btn-cancel" type=button >Cancelar</button>
-            <button id="cargaExcel" class="btn-confirm" name="carga-excel">Cargar</button>
+        <footer class="first-import-footer">
+            <button id="cargaExcel" class="btn-confirm" name="primer-import">Cargar</button>
         </footer>
-        
     </form>
 </dialog>

@@ -9,6 +9,7 @@ $routes = [
     '' => 'login',
     'index.php' => 'login',      // Método login para la página de inicio de sesión
     'seleccion-tienda' => 'tiendas',      // Método index para la página de inicio (una vez que el usuario ha iniciado sesión)
+    'primera-importacion' => 'firstImport',
     'gestion' => 'gestionTienda',    // Método tiendas para la página de tiendas
     'gestion-productos' => 'gestionProductos',
     'gestion-usuarios' => 'gestionUsuarios'

@@ -92,10 +92,11 @@ class MainController {
             // Obtén los datos del formulario
             $tienda = $_POST['tienda'];
 
-            // Verifica si el usuario existe en la base de datos
+            // Verifica si ela tienda es valida
             if ($usuario->tiendaValida($tienda)) {
                 // El usuario existe, redirige a la página de inicio
                 $_SESSION['shop'] = $tienda;
+
                 header('Location: /etq-elc/gestion/');
                 exit(); // Asegúrate de detener la ejecución después de redirigir
             } else {
@@ -138,6 +139,7 @@ class MainController {
 
     public function gestionProductos(){
         $components = array(
+            'first-import-modal' => 'backend/views/components/productsPage/firstImportModal.php',
             'filter-modal' => 'backend/views/components/productsPage/filterModal.php',
             'add-modal' => 'backend/views/components/productsPage/addModal.php',
             'add-excel-modal' => 'backend/views/components/productsPage/addExcelModal.php',
@@ -169,6 +171,10 @@ class MainController {
 
         $tiendaId = $_SESSION['shop']; 
 
+        $tienda = new Tienda($this->conexionBD, $tiendaId);
+
+        $hayEtiquetasAsociadas = $tienda->tieneEtiquetasAsociadas();
+
         $productos = Articulo::getArticulosPorTienda($this->conexionBD, $_SESSION['shop']);
 
         $disenios = Diseño::getDiseniosPorTienda($this->conexionBD, $_SESSION['shop']);
@@ -184,6 +190,47 @@ class MainController {
         var_dump($_SESSION['response']);
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            if(isset($_POST['primer-import'])){
+                if(isset($_FILES['archivoExcel'])) {
+                    try{
+                        // Obtener la información del archivo
+                        $nombreArchivo = $_FILES['archivoExcel']['name'];
+                        $tipoArchivo = $_FILES['archivoExcel']['type'];
+                        $rutaTemporal = $_FILES['archivoExcel']['tmp_name'];
+                        $tamañoArchivo = $_FILES['archivoExcel']['size'];
+                        $errorArchivo = $_FILES['archivoExcel']['error'];
+
+                        // Verificar si no hubo errores al subir el archivo
+                        if ($errorArchivo === UPLOAD_ERR_OK) {
+
+                            // procesarArchivoExcel devuelve falso si el formato es incorrecto:
+                            $productosExcel = $excelService->getProductosArchivoExcel($rutaTemporal, $tiendaId);
+
+                            if($productosExcel){
+                                // Con JS se pone una pantalla de carga cuando se le da click al boton de "Cargar":
+                                $informeNuevo = Articulo::procesarProductos($productosExcel, $tiendaId, $disenioPredeterminado);
+
+                                $response = $apiService->importProducts($productosExcel , $tiendaId);
+
+                                $_SESSION['response'] = $response;
+
+                                $_SESSION['informe'] = $informeNuevo;
+
+                                // Cuando se han procesado todos los productos se redirige a la pagina gestion-productos.
+                                header("Location: /etq-elc/gestion-productos/");
+                                exit();
+                            } else {
+                                $mensaje = "Archivo vacio.";
+                            }
+                        } else {
+                            $mensaje = "Error al leer el archivo.";
+                        }
+                    } catch(Exception $e){
+                        $mensaje = "Se ha producido un error con la lectura del archivo.";
+                    }
+                    
+                }
+            }
             if(isset($_POST['add'])){
                 if (!empty($_POST['codigo_barras']) && !empty($_POST['disenio_asociado'])) {
                     // Obtiene los datos del formulario

@@ -1,9 +1,14 @@
 <section class="products">
     <header>
         <img src="<?php echo $this->baseUrl ?>/public/img/cart4.svg" alt="Productos" class="cart">
-        <h1>Gestión de productos:</h1>
+        <h1>Gestión de productos</h1>
     </header>
-    <main>    
+    <main>
+        <?php 
+            if(!$hayEtiquetasAsociadas){
+                include $components['first-import-modal'];
+            } 
+        ?>
         <header class="options">
             <div class="add-opts">
                 <button class="table-opt add-product" id="btn-add">

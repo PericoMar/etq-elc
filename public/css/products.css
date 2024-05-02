@@ -89,6 +89,11 @@ button.table-opt{
     background-color: rgba(0,0,0,0.4); /* Fondo semi-transparente */
 }
 
+/* El modal de la primera importación debe aparecer al principio y se controla con PHP si ya ha aparecido antes */
+#first-import{
+    display:block;
+}
+
 .modal .inform-modal{
     display:block;
 }

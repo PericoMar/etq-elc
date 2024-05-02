@@ -6,7 +6,7 @@ class Tienda {
     private ConexionBD $conexionBD;
 
     // Constructor
-    public function __construct($conexionDB, $id, $usuarioNombre = null) {
+    public function __construct($conexionBD, $id, $usuarioNombre = null) {
         $this->conexionBD = $conexionBD;
         $this->id = $id;
         if($usuarioNombre != null){
@@ -69,6 +69,27 @@ class Tienda {
             return false;
         }
     }
+
+    public function tieneEtiquetasAsociadas(){
+        try {
+            $conn = $this->conexionBD->getConexion();
+    
+            // Consulta SQL para verificar si hay artículos asociados a la tienda con etiquetas asignadas
+            $sql = "SELECT COUNT(*) FROM Articulos WHERE store_id = :id AND etiqueta IS NOT NULL";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':id', $this->id);
+            $stmt->execute();
+            $count = $stmt->fetchColumn();
+    
+            // Si se encontraron artículos con etiquetas asociadas, devolver true, de lo contrario false
+            return $count > 0;
+        } catch(PDOException $e) {
+            // Manejar errores de la conexión o de la consulta
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+    
     
 
     // Métodos getters y setters para acceder y modificar los atributos

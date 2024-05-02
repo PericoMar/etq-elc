@@ -9,14 +9,14 @@ class ExcelService
     private $tamañoMaximo = 50 * 1024 * 1024; //50MB de tamaño maximo.
 
     // Variables para almacenar los índices de las columnas
-    private $indiceCodigoBarras = 0;
-    private $indiceCodigoProducto = 1;
-    private $indiceNombreCorto = 2;
-    private $indiceNombreArticulo = 3;
-    private $indiceDisenoEtiqueta = 4;
-    private $indicePrecioInicial = 5;
-    private $indicePrecioVenta = 6;
-    private $indiceEtiqueta = 7;
+    private $indiceEtiqueta = 0;
+    private $indiceCodigoBarras = 1;
+    private $indiceCodigoProducto = 2;
+    private $indiceNombreCorto = 3;
+    private $indiceNombreArticulo = 4;
+    private $indiceDisenoEtiqueta = 5;
+    private $indicePrecioInicial = 6;
+    private $indicePrecioVenta = 7;
     private $indiceInformacionExtra = 8;
 
     public function getProductosArchivoExcel($archivo, $tienda)

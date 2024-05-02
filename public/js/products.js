@@ -1,3 +1,5 @@
+const firstImportModal = document.getElementById("first-import");
+
 const btnAddProduct = document.getElementById("btn-add");
 const btnFilter = document.getElementById("btn-filter");
 const btnAddExcel = document.getElementById("btn-add-excel");
@@ -216,6 +218,15 @@ const excelForm = document.getElementById("excel-form");
 excelForm.addEventListener("submit" , () => {
     setTimeout( () => {
         excelForm.innerHTML = "<div class='loading-modal'><div class='loading-spinner'></div><p>Cargando productos... Por favor, no cierre esta ventana.</p></div>";
+    } , 1000)
+    
+})
+
+const firstImportForm = document.getElementById("first-import");
+
+excelForm.addEventListener("submit" , () => {
+    setTimeout( () => {
+        excelForm.innerHTML = "<div class='loading-modal'><div class='loading-spinner'></div><p>Cargando etiquetas... Por favor, no cierre esta ventana.</p></div>";
     } , 1000)
     
 })

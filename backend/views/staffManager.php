@@ -1,7 +1,7 @@
 <section class="staffManager">
     <header>
         <img src="<?php echo $this->baseUrl ?>/public/img/person-vcard.svg" alt="Productos" class="cart">
-        <h1>Gestión de usuarios:</h1>
+        <h1>Gestión de usuarios</h1>
     </header>
     <main>    
         <header class="options">
