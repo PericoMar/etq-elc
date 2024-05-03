@@ -32,10 +32,10 @@
                         <input type="text" id="nombre_articulo_add" name="nombre_articulo" placeholder="Ej: Hacendado azucar blanquilla 1Kg">
 
                         <label for="precio-inicial_add">Precio inicial:</label>
-                        <input type="text" id="precio-inicial_add" name="precio-inicial" placeholder="Ej: 10.00" pattern="\d+([,.]\d{1,2})?|^$">
+                        <input type="text" id="precio-inicial_add" name="precio-inicial" placeholder="Ej: 10.00. Max. 2 decimales" pattern="\d+([,.]\d{1,2})?|^$">
 
                         <label for="precio-venta_add">Precio venta:</label>
-                        <input type="text" id="precio-venta_add" name="precio-venta" placeholder="Ej: 8.00" pattern="\d+([,.]\d{1,2})?|^$">
+                        <input type="text" id="precio-venta_add" name="precio-venta" placeholder="Ej: 8.00. Max. 2 decimales" pattern="\d+([,.]\d{1,2})?|^$">
 
                         <label for="info_extra_add">Información extra:</label>
                         <input type="text" id="info_extra_add" name="info_extra" placeholder="Ej: Paquete color blanco">

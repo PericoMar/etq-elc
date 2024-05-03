@@ -1,5 +1,5 @@
 <dialog id="add-excel" class="modal">
-    <form action="<?php echo $this->baseUrl ?>/gestion-productos/" method=post class="modal-content confirmation-modal excel-modal" enctype="multipart/form-data" accept=".xls,.xlsx" id="excel-form">
+    <form action="<?php echo $this->baseUrl ?>/gestion-productos/" method=post class="modal-content confirmation-modal excel-modal excel-form" enctype="multipart/form-data" accept=".xls,.xlsx" id="excel-form">
         <header class="modal-header">
             <h3>Cargar productos a partir de archivo Excel:</h3>
             <span class="close" data-modal="add-excel">&times;</span>

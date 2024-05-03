@@ -1,5 +1,5 @@
 <dialog id="first-import" class="modal">
-    <form action="<?php echo $this->baseUrl ?>/gestion-productos/" class="modal-content confirmation-modal excel-modal" method=post enctype="multipart/form-data" accept=".xls,.xlsx" id="first-import-form">
+    <form action="<?php echo $this->baseUrl ?>/gestion-productos/" class="modal-content confirmation-modal excel-modal excel-form" method=post enctype="multipart/form-data" accept=".xls,.xlsx" id="first-import-form">
         <header class="modal-header">
             <h3>Primera carga a partir de archivo Excel:</h3>
         </header>

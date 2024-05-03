@@ -174,7 +174,7 @@ class MainController {
 
         $tienda = new Tienda($this->conexionBD, $tiendaId);
 
-        $hayEtiquetasAsociadas = $tienda->tieneArticulosAsociadas();
+        $hayEtiquetasAsociadas = $tienda->tieneArticulosAsociados();
 
         $productos = Articulo::getArticulosPorTienda($this->conexionBD, $_SESSION['shop']);
 
@@ -185,10 +185,6 @@ class MainController {
 
         // Servicio API para gestionar los productos con la API.
         $apiService = new ServicioAPI();
-
-
-        var_dump($apiService->getLoginCredentials());
-        var_dump($_SESSION['response']);
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
             if(isset($_POST['add'])){
@@ -206,18 +202,22 @@ class MainController {
                     
                     $articulo = new Articulo($codigoBarras, $tiendaId, $disenoId, $codigoProducto, $nombreCorto, $nombreArticulo, $precioInicial, $precioVenta, $etiqueta, $infoExtra);
 
-                    if(!$articulo->articuloExiste()){
+                    if($articulo->articuloExiste()){
 
-                        $articulo->aniadirArticulo();
-
-                        $response = $apiService->batchBind($articulo, $tiendaId);
-
-                        $_SESSION['response'] = $response;
+                        $mensaje = "Ya existe un artículo con ese codigo de barras.";
 
                     } else if($articulo->etiquetaEnUso()){
-                        $mensaje = "La etiqueta ya está en uso. Borrala o editala.";
+
+                        $mensaje = "La etiqueta ya está en uso. Bórrala o edítala.";    
+
                     } else {
-                        $mensaje = "Ya existe un articulo con ese codigo de barras.";
+                        
+                        $articulo->aniadirArticulo();
+
+                        $apiService->importProduct($articulo, $tiendaId);
+
+                        $response = $apiService->bindPriceTag($articulo, $tiendaId);
+
                     }
                 }
             }
@@ -246,9 +246,10 @@ class MainController {
                                 // Con JS se pone una pantalla de carga cuando se le da click al boton de "Cargar":
                                 $informeNuevo = Articulo::procesarProductos($productosExcel, $tiendaId, $disenioPredeterminado);
 
-                                $response = $apiService->importProducts($productosExcel , $tiendaId);
+                                // $response = $apiService->batchBindInBatches($productosExcel , $tiendaId);
+                                $apiService->importProducts($productosExcel, $tiendaId);
 
-                                $_SESSION['response'] = $response;
+                                $response = $apiService->bindPriceTags($productosExcel, $tiendaId);
 
                                 $_SESSION['informe'] = $informeNuevo;
 
@@ -256,7 +257,7 @@ class MainController {
                                 header("Location: /etq-elc/gestion-productos/");
                                 exit();
                             } else {
-                                $mensaje = "Archivo vacio.";
+                                $mensaje = "Archivo vacío.";
                             }
                             
                     
@@ -273,6 +274,9 @@ class MainController {
             if(isset($_POST['confirma-eliminar'])){
                 $codigo_barras = $_POST['codigo-barras'];
                 Articulo::borrarArticulo($codigo_barras);
+
+                // El ubind es de la antena por lo que no queremos hacerlo.
+                // $apiService->unbindPriceTag(Articulo::getPriceTagFromBarCode());
                 $response = $apiService->deleteProduct($codigo_barras, $tiendaId);
             }
 
@@ -291,23 +295,32 @@ class MainController {
                 $anteriorCodBarras = $_POST['anterior_cod_barras'];
                 
                 $articulo = new Articulo($codigoBarras, $tiendaId, $disenoId, $codigoProducto, $nombreCorto, $nombreArticulo, $precioInicial, $precioVenta, $etiqueta, $infoExtra);
-                if($anteriorCodBarras !== $codigoBarras){
-                    if(!$articulo->articuloExiste()){
+                if($articulo->etiquetaEnUso()){
+                    $mensaje = "La etiqueta ya está en uso. Bórrala o edítala.";
+                } else {
+                    if($anteriorCodBarras !== $codigoBarras){
+                        if(!$articulo->articuloExiste()){
+                            Articulo::borrarArticulo($anteriorCodBarras);
+                            $articulo->aniadirArticulo();
+                        } else {
+                            $mensaje = "Ya existe un articulo con ese codigo de barras.";
+                        }
+                    } else {
                         Articulo::borrarArticulo($anteriorCodBarras);
                         $articulo->aniadirArticulo();
-                    } else {
-                        $mensaje = "Ya existe un articulo con ese codigo de barras.";
+    
+                        $apiService->importProduct($articulo, $tiendaId);
+    
+                        $response = $apiService->bindPriceTag($articulo, $tiendaId);
                     }
-                } else {
-                    Articulo::borrarArticulo($anteriorCodBarras);
-                    $articulo->aniadirArticulo();
                 }
+                
                 
             }
 
+            // Volver a coger los productos despues de realizar los cambios pertinentes.
             $productosFiltrados = Articulo::getArticulosPorTienda($this->conexionBD, $_SESSION['shop']);
 
-            
         } else {
             $productosFiltrados = $productos;
         }
@@ -444,7 +457,7 @@ class MainController {
         $codigo_producto = isset($_GET['codigo_producto']) ? $_GET['codigo_producto'] : '';
         $nombre_corto = isset($_GET['nombre_corto']) ? $_GET['nombre_corto'] : '';
         $nombre_articulo = isset($_GET['nombre_articulo']) ? $_GET['nombre_articulo'] : '';
-        $disenioAsociado = $_GET['disenio_asociado'];
+        $disenioAsociado = isset($_GET['disenio_asociado']) ? $_GET['disenio_asociado'] : '';
         $precio_inicial_min = isset($_GET['precio-inicial-desde']) ? floatval($_GET['precio-inicial-desde']) : 0;
         $precio_inicial_max = isset($_GET['precio-inicial-hasta']) && $_GET['precio-inicial-hasta'] != "" ? floatval($_GET['precio-inicial-hasta']) : $max_price;
         $precio_venta_min = isset($_GET['precio-venta-desde']) ? floatval($_GET['precio-venta-desde']) : 0;

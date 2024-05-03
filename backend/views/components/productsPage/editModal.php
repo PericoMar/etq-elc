@@ -7,7 +7,7 @@
         <main class="modal-body">
             <form action="<?php echo $this->baseUrl?>/gestion-productos/" method="post" id="filterForm" class="modal-form">
                 <label for="etiqueta_edit">Etiqueta asociada: <span class="campo-obligatorio">*</span></label>
-                <input type="text" id="etiqueta_edit" name="etiqueta" placeholder="Ej: 803907294" disabled>
+                <input type="text" id="etiqueta_edit" name="etiqueta" placeholder="Ej: 803907294">
 
                 <label for="codigo_barras_edit">Código de barras: <span class="campo-obligatorio">*</span></label>
                 <input type="text" id="codigo_barras_edit" name="codigo_barras" placeholder="Ej: 8412345678905">

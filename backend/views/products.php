@@ -30,7 +30,7 @@
             <?php include $components['add-excel-modal'] ?>
             <?php
                 if(isset($informe)){
-                    include $components['informe'];
+                    include $components['inform-modal'];
                 }
             ?>
             

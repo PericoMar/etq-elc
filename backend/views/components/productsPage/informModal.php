@@ -10,7 +10,7 @@
             <p>Han ocurrido <?php echo $informe['errores'] ?> errores. 
             <?php 
                 if($informe['errores'] > 0){
-                    ?><span>Posiblemente debido a etiquetas repetidas</span><?php
+                    ?><p>Posiblemente debido a etiquetas repetidas o que ya estaban en uso.</p><?php
                 }
             ?>
             </p>

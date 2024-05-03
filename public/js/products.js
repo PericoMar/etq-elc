@@ -240,20 +240,19 @@ btnsClose.forEach( function(btn) {
 
 // Función para loader cuando esté cargando el archivo:
 
-const excelForm = document.getElementById("excel-form");
+// Función para mostrar un mensaje de carga
+function mostrarMensajeCarga(formulario, mensaje) {
+    setTimeout(() => {
+        formulario.innerHTML = "<div class='loading-modal'><div class='loading-spinner'></div><p>" + mensaje + "</p></div>";
+    }, 1000);
+}
 
-excelForm.addEventListener("submit" , () => {
-    setTimeout( () => {
-        excelForm.innerHTML = "<div class='loading-modal'><div class='loading-spinner'></div><p>Cargando productos... Por favor, no cierre esta ventana.</p></div>";
-    } , 1000)
-    
-})
+// Obtener todos los formularios con la clase 'loading-form'
+const forms = document.querySelectorAll(".excel-form");
 
-const firstImportForm = document.getElementById("first-import");
-
-excelForm.addEventListener("submit" , () => {
-    setTimeout( () => {
-        excelForm.innerHTML = "<div class='loading-modal'><div class='loading-spinner'></div><p>Cargando etiquetas... Por favor, no cierre esta ventana.</p></div>";
-    } , 1000)
-    
-})
+// Iterar sobre cada formulario y agregar el evento
+forms.forEach(formulario => {
+    formulario.addEventListener("submit", () => {
+        mostrarMensajeCarga(formulario, "Cargando productos... Por favor, no cierre esta ventana.");
+    });
+});

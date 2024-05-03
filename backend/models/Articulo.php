@@ -70,34 +70,36 @@ class Articulo {
         }
     }
 
-    public static function procesarProductos($productos , $tienda, $disenioPredeterminado){
+    public static function procesarProductos(&$productos , $tienda, $disenioPredeterminado){
         $informe = [
             'editados' => 0,
             'añadidos' => 0,
             'errores' => 0
         ];
-
+    
         $disenios = Diseño::getDiseniosPorTienda(new ConexionBD() , $tienda);
         $disenios = array_column($disenios, 'id_plantilla');
         
         try {
-            foreach ($productos as $producto) {
-
+            // Utilizar un bucle for en lugar de un bucle foreach para tener acceso a $key
+            for ($i = 0; $i < count($productos); $i++) {
+                $producto = $productos[$i]; // Obtener el producto en la posición $i
+    
                 $disenioExcel = $producto->getDisenoId();
                 // Comprueba si el diseño existe en nuestro array de diseños, sino pone uno por defecto.
-
                 if(!in_array($disenioExcel, $disenios)){
                     $producto->setDisenoId($disenioPredeterminado);
                 }
                 
                 if($producto->etiquetaEnUso()){
                     $informe['errores']++;
+                    unset($productos[$i]); // Eliminar el producto del array
                 } else {
                     // Verificar si el producto ya existe en la base de datos
                     if ($producto->articuloExiste()) {
                         // Actualizar el producto existente
                         $producto->editarArticulo();
-
+    
                         // Añadir el código de barras al informe de productos editados
                         $informe['editados']++;
                     } else {
@@ -106,18 +108,17 @@ class Articulo {
                         $informe['añadidos']++;
                     }
                 }
-                
             }
-
+    
             return $informe;
-
+    
         } catch(PDOException $e) {
             // Manejar errores de la conexión o de la consulta
             echo "Error: " . $e->getMessage();
             return false;
         }
-        
     }
+    
 
     public function aniadirArticulo(){
         try {
@@ -245,6 +246,29 @@ class Articulo {
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch(PDOException $e){
+            // Manejar errores de la conexión o de la consulta
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function getPriceTagFromBarCode($codigo_barras){
+        try{
+            $conexionBD = new ConexionBD();
+            $conn = $conexionBD->getConexion();
+
+            $sql = "SELECT etiqueta FROM Articulos WHERE codigo_barras = :codigo_barras";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':codigo_barras', $codigo_barras);
+            $stmt->execute();
+
+             // Devolver solo la etiqueta
+            $etiqueta = $stmt->fetchColumn();
+
+            return $etiqueta;
 
         } catch(PDOException $e){
             // Manejar errores de la conexión o de la consulta

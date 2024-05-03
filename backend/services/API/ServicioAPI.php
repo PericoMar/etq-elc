@@ -110,8 +110,8 @@ class ServicioAPI {
         return $response;
     }
 
-    public function batchBind($producto , $tiendaID){
-        $endpoint = "/erp/esl/batchBind";
+    public function bindPriceTags(array $productos, $tiendaID){
+        $endpoint = "/bind/batchBind";
         $url = $this->baseUrl . $endpoint;
 
         $loginCrendentials = $this->getLoginCredentials();
@@ -123,19 +123,19 @@ class ServicioAPI {
             $this->language
         );
 
-        $itemList = [];
+        $tagItemsBinds = [];
 
-        $bindList[] = array(
-            "eslBarCode" => $producto->getPriceTag(),
-            "item" => $producto->getArrayArticulo()
-        );
-
+        foreach($productos as $producto){
+            $tagItemsBinds[] = array(
+                "eslBarcode" => $producto->getPriceTag(),
+                "itemBarcode" => $producto->getCodigoBarras()
+            );
+        }
 
         // Datos a enviar.
         $data = array(
             "storeId" => $tiendaID,
-            "unitName" => 0,
-            "bindList" => $bindList
+            "tagItemBinds" => $tagItemsBinds
         );
 
         // Inicializar cURL
@@ -163,6 +163,111 @@ class ServicioAPI {
         return $response;
     }
 
+    public function bindPriceTag($producto , $tiendaID){
+        $endpoint = "/bind/batchBind";
+        $url = $this->baseUrl . $endpoint;
+
+        $loginCrendentials = $this->getLoginCredentials();
+
+        // Encabezados personalizados
+        $headers = array(
+            'Authorization: ' . $loginCrendentials['token'], // Encabezado de autorización.
+            'Content-type: ' . $this->contentType, // Tipo de contenido.
+            $this->language
+        );
+
+        $tagItemsBinds[] = array(
+            "eslBarcode" => $producto->getPriceTag(),
+            "itemBarcode" => $producto->getCodigoBarras()
+        );
+
+        // Datos a enviar.
+        $data = array(
+            "storeId" => $tiendaID,
+            "tagItemBinds" => $tagItemsBinds
+        );
+
+        // Inicializar cURL
+        $ch = curl_init($url);
+
+        // Configurar opciones de cURL
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Especificar el tipo de solicitud (POST en este ejemplo)
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        // Configurar los datos a enviar (si es una solicitud POST)
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        // Establecer los encabezados personalizados
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        // Ejecutar la solicitud y obtener la respuesta
+        $response = curl_exec($ch);
+
+        
+        // Cerrar la conexión cURL
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function batchBind($producto, $tiendaID) {
+        $endpoint = "/erp/esl/batchBind";
+        $url = $this->baseUrl . $endpoint;
+    
+        $loginCrendentials = $this->getLoginCredentials();
+    
+        // Encabezados personalizados
+        $headers = array(
+            'Authorization: ' . $loginCrendentials['token'], // Encabezado de autorización.
+            'Content-type: ' . $this->contentType, // Tipo de contenido.
+            $this->language
+        );
+    
+        $bindList = array(
+            array(
+                "eslBarcode" => $producto->getPriceTag(),
+                "item" => $producto->getArrayArticulo()
+            )
+        );
+    
+        // Datos a enviar.
+        $data = array(
+            "storeId" => $tiendaID,
+            "unitName" => 1,
+            "bindList" => $bindList
+        );
+    
+        // Inicializar cURL
+        $ch = curl_init($url);
+    
+        // Configurar opciones de cURL
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+        // Especificar el tipo de solicitud (POST en este ejemplo)
+        curl_setopt($ch, CURLOPT_POST, true);
+    
+        // Configurar los datos a enviar (si es una solicitud POST)
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    
+        // Establecer los encabezados personalizados
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    
+        // Ejecutar la solicitud y obtener la respuesta
+        $response = curl_exec($ch);
+    
+        // Verificar si hay errores
+        if(curl_errno($ch)) {
+            $response = curl_error($ch);
+        }
+        
+        // Cerrar la conexión cURL
+        curl_close($ch);
+    
+        return $response;
+    }
+
     public function batchBindInBatches(array $productos , $tiendaID){
         $endpoint = "/erp/esl/batchBind";
         $url = $this->baseUrl . $endpoint;
@@ -176,11 +281,11 @@ class ServicioAPI {
             $this->language
         );
 
-        $itemList = [];
+        $bindList = [];
 
         foreach($productos as $producto){
             $bindList[] = array(
-                "eslBarCode" => $producto->getPriceTag(),
+                "eslBarcode" => $producto->getPriceTag(),
                 "item" => $producto->getArrayArticulo()
             );
         }

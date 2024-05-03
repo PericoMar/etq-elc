@@ -70,7 +70,7 @@ class Tienda {
         }
     }
 
-    public function tieneArticulosAsociadas(){
+    public function tieneArticulosAsociados(){
         try {
             $conn = $this->conexionBD->getConexion();
     
@@ -79,7 +79,9 @@ class Tienda {
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':id', $this->id);
             $stmt->execute();
-            $count = $stmt->fetchColumn();
+            
+            // Obtener el número de filas afectadas
+            $count = $stmt->rowCount();
     
             // Si se encontraron artículos con etiquetas asociadas, devolver true, de lo contrario false
             return $count > 0;
@@ -89,6 +91,7 @@ class Tienda {
             return false;
         }
     }
+    
     
     
 
