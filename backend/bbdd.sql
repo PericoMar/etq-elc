@@ -53,6 +53,7 @@ CREATE TABLE Articulos (
     precio_inicial DECIMAL(10, 2),
     precio_venta DECIMAL(10, 2),
     etiqueta VARCHAR(50),
+    familia VARCHAR(50),
     info_extra TEXT,
     PRIMARY KEY (codigo_barras, store_id),
     FOREIGN KEY (store_id) REFERENCES Tiendas(store_id),
@@ -91,7 +92,6 @@ CREATE TABLE Articulos (
 
     INSERT INTO Diseños_Tiendas (store_id, id_plantilla)
     VALUES 
-    ('1618198065591', 2);
     ('1618198065591', 3);
 
     -- Insertar artículos

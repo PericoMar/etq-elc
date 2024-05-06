@@ -55,6 +55,11 @@
                 <label for="precio-venta-hasta_filter" class="hasta">Hasta:</label>
                 <input type="number" id="precio-venta-hasta_filter" name="precio-venta-hasta" placeholder="Ej: 10">
             </div>
+            
+            <div class="filtro-campo" id="div_familia_filter" style="display: none;">
+                <label for="familia_filter">Familia:</label>
+                <input type="text" id="familia_filter" name="familia" placeholder="Ej: Bebidas">
+            </div>
 
             <div class="filtro-campo" id="div_info_extra_filter" style="display: none;">
                 <label for="info_extra_filter">Información extra:</label>
@@ -70,6 +75,7 @@
                     <option value="precio-inicial">Rango precio inicial</option>
                     <option value="precio-venta">Rango precio venta</option>
                     <option value="disenio_asociado">Diseño asociado</option>
+                    <option value="familia">Familia</option>
                     <option value="info_extra">Información extra</option>
                     <!-- Agrega más opciones según tus necesidades -->
                 </select>

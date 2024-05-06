@@ -45,7 +45,7 @@ header.nav-bar{
     height: 88px;
     background-color: var(--app);
     color: white;
-    padding: 8px 12%;
+    padding: 8px 8%;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
@@ -53,16 +53,24 @@ header.nav-bar{
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1); 
 }
 
-header .logo{
-    width: 100px;
+.logo-title{
+    display: flex;
+    align-items: center;
+    width: 400px;
+}
+
+.logo{
+    width: 60px;
     height: 100%;
+    margin-right: 30px;
 }
 
 header.nav-bar nav{
-    width:450px;
+    width:350px;
 }
 
 header.nav-bar nav ul{
+    font-size:0.85em;
     padding: 0px;
     margin: 0px;
     width: 100%;

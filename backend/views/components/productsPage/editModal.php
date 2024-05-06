@@ -39,6 +39,9 @@
                 <label for="precio_venta_edit">Precio venta:</label>
                 <input type="text" id="precio_venta_edit" name="precio-venta" placeholder="Ej: 8.00" pattern="\d+([,.]\d{1,2})?|^$">
 
+                <label for="familia_edit">Familia:</label>
+                <input type="text" id="familia_edit" name="familia" placeholder="Ej: Bebidas">
+
                 <label for="info_extra_edit">Información extra:</label>
                 <input type="text" id="info_extra_edit" name="info_extra" placeholder="Ej: Paquete color blanco">
 

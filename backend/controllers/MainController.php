@@ -141,6 +141,7 @@ class MainController {
         $components = array(
             'first-import-modal' => 'backend/views/components/productsPage/firstImportModal.php',
             'inform-modal' => 'backend/views/components/productsPage/informModal.php',
+            'inform-add-modal' => 'backend/views/components/productsPage/informAddModal.php',
             'filter-modal' => 'backend/views/components/productsPage/filterModal.php',
             'add-modal' => 'backend/views/components/productsPage/addModal.php',
             'add-excel-modal' => 'backend/views/components/productsPage/addExcelModal.php',
@@ -162,7 +163,7 @@ class MainController {
         }
 
         if(isset($_SESSION['informe'])){
-            $informe = $_SESSION['informe'];
+            $informe= $_SESSION['informe'];
             unset($_SESSION['informe']);
         }
         
@@ -198,9 +199,10 @@ class MainController {
                     $precioInicial = isset($_POST['precio-inicial']) ? $_POST['precio-inicial'] : 0;
                     $precioVenta = isset($_POST['precio-venta']) ? $_POST['precio-venta'] : 0;
                     $etiqueta = isset($_POST['etiqueta']) ? $_POST['etiqueta'] : '';
+                    $familia = isset($_POST['familia']) ? $_POST['familia'] : '';
                     $infoExtra = isset($_POST['info_extra']) ? $_POST['info_extra'] : '';
                     
-                    $articulo = new Articulo($codigoBarras, $tiendaId, $disenoId, $codigoProducto, $nombreCorto, $nombreArticulo, $precioInicial, $precioVenta, $etiqueta, $infoExtra);
+                    $articulo = new Articulo($codigoBarras, $tiendaId, $disenoId, $codigoProducto, $nombreCorto, $nombreArticulo, $precioInicial, $precioVenta, $etiqueta,$familia,  $infoExtra);
 
                     if($articulo->articuloExiste()){
 
@@ -211,17 +213,41 @@ class MainController {
                         $mensaje = "La etiqueta ya está en uso. Bórrala o edítala.";    
 
                     } else {
-                        
-                        $articulo->aniadirArticulo();
-
+                    
                         $apiService->importProduct($articulo, $tiendaId);
 
                         $response = $apiService->bindPriceTag($articulo, $tiendaId);
 
+                        // En este array meteré las etiquetas que no esten disponibles.
+                        // Si el array está vacio el informe confirmará que se añadió el producto.
+                        $informeAdd = [];
+
+                        $responseArray = json_decode($response, true);
+
+                        if($responseArray['success']){
+
+                            $articulo->aniadirArticulo();
+
+                            $response = $apiService->updatePriceTagByBarCode($articulo->getCodigoBarras(), $tiendaId);
+
+                        } else {
+                            // Si la petición no ha sido exitosa se cogen las etiquetas no disponibles.
+                            preg_match_all('/\[(.*?)\]/', $responseArray['originalMessage'], $matches);
+
+                            // Verificar si se encontraron coincidencias
+                            if (!empty($matches[1])) {
+                                // Los valores entre corchetes se encuentran en $matches[1]
+                                $valoresEntreCorchetes = $matches[1];
+                                foreach ($valoresEntreCorchetes as $valor) {
+                                    $informeAdd[] = $valor;
+                                }
+                            }
+                        }
                     }
                 }
             }
             
+            // Con JS se pone una pantalla de carga cuando se le da click al boton de "Cargar":
             if(isset($_POST['carga-excel']) || isset($_POST['primer-import'])){
                 
                 if(isset($_FILES['archivoExcel'])) {
@@ -243,13 +269,31 @@ class MainController {
                             // procesarArchivoExcel devuelve falso si el formato es incorrecto:
                             $productosExcel = $excelService->getProductosArchivoExcel($rutaTemporal, $tiendaId);
                             if($productosExcel){
-                                // Con JS se pone una pantalla de carga cuando se le da click al boton de "Cargar":
+                                
                                 $informeNuevo = Articulo::procesarProductos($productosExcel, $tiendaId, $disenioPredeterminado);
 
                                 // $response = $apiService->batchBindInBatches($productosExcel , $tiendaId);
                                 $apiService->importProducts($productosExcel, $tiendaId);
 
                                 $response = $apiService->bindPriceTags($productosExcel, $tiendaId);
+
+                                $responseArray = json_decode($response, true);
+
+                                if($responseArray['originalMessage']){
+                                    preg_match_all('/\[(.*?)\]/', $responseArray['originalMessage'], $matches);
+
+                                    // Verificar si se encontraron coincidencias
+                                    if (!empty($matches[1])) {
+                                        // Los valores entre corchetes se encuentran en $matches[1]
+                                        $valoresEntreCorchetes = $matches[1];
+                                        foreach ($valoresEntreCorchetes as $valor) {
+                                            $informeNuevo['etiquetas'][] = $valor;
+                                            $informeNuevo['errores']++;
+                                        }
+                                    }
+                                }
+                                
+                                $response = $apiService->updatePriceTagsByBarCode($productosExcel, $tiendaId);
 
                                 $_SESSION['informe'] = $informeNuevo;
 
@@ -273,11 +317,15 @@ class MainController {
      
             if(isset($_POST['confirma-eliminar'])){
                 $codigo_barras = $_POST['codigo-barras'];
+                $etiqueta = $_POST['etiqueta'];
                 Articulo::borrarArticulo($codigo_barras);
 
-                // El ubind es de la antena por lo que no queremos hacerlo.
-                // $apiService->unbindPriceTag(Articulo::getPriceTagFromBarCode());
+                $response= $apiService->unbindPriceTag($etiqueta, $tiendaId);
+
                 $response = $apiService->deleteProduct($codigo_barras, $tiendaId);
+
+                // No se si puedo reiniciar la etiqueta porque ya no esta conectada a un BarCode.
+                // $response = $apiService->updatePriceTagByBarCode($articulo->getCodigoBarras(), $tiendaId);
             }
 
             if(isset($_POST['confirma-editar'])){
@@ -290,18 +338,27 @@ class MainController {
                 $precioInicial = isset($_POST['precio-inicial']) ? $_POST['precio-inicial'] : 0;
                 $precioVenta = isset($_POST['precio-venta']) ? $_POST['precio-venta'] : 0;
                 $etiqueta = isset($_POST['etiqueta']) ? $_POST['etiqueta'] : 0;
+                $familia = isset($_POST['familia']) ? $_POST['familia'] : '';
                 $infoExtra = isset($_POST['info_extra']) ? $_POST['info_extra'] : '';
 
                 $anteriorCodBarras = $_POST['anterior_cod_barras'];
                 
-                $articulo = new Articulo($codigoBarras, $tiendaId, $disenoId, $codigoProducto, $nombreCorto, $nombreArticulo, $precioInicial, $precioVenta, $etiqueta, $infoExtra);
-                if($articulo->etiquetaEnUso()){
+                $articulo = new Articulo($codigoBarras, $tiendaId, $disenoId, $codigoProducto, $nombreCorto, $nombreArticulo, $precioInicial, $precioVenta, $etiqueta,$familia, $infoExtra);
+                if($articulo->etiquetaEnUso() && $etiqueta != $articulo->getPriceTag()){
                     $mensaje = "La etiqueta ya está en uso. Bórrala o edítala.";
                 } else {
+                    // Si se ha cambiado el CodBarras, tengo que comprobar si el nuevo CodBarras estaba en uso.
                     if($anteriorCodBarras !== $codigoBarras){
+                        // Si no estaba en uso, se edita el articulo.
                         if(!$articulo->articuloExiste()){
                             Articulo::borrarArticulo($anteriorCodBarras);
                             $articulo->aniadirArticulo();
+
+                            $response = $apiService->importProduct($articulo, $tiendaId);
+
+                            $response = $apiService->bindPriceTag($articulo, $tiendaId);
+
+                            $response = $apiService->updatePriceTagByBarCode($articulo->getCodigoBarras(), $tiendaId);
                         } else {
                             $mensaje = "Ya existe un articulo con ese codigo de barras.";
                         }
@@ -309,9 +366,11 @@ class MainController {
                         Articulo::borrarArticulo($anteriorCodBarras);
                         $articulo->aniadirArticulo();
     
-                        $apiService->importProduct($articulo, $tiendaId);
+                        $response = $apiService->importProduct($articulo, $tiendaId);
     
                         $response = $apiService->bindPriceTag($articulo, $tiendaId);
+
+                        $response = $apiService->updatePriceTagByBarCode($articulo->getCodigoBarras(), $tiendaId);
                     }
                 }
                 
@@ -453,6 +512,7 @@ class MainController {
     private function productosFiltrados($productos){
         $max_price = 9999999;
         $etiqueta = isset($_GET['etiqueta']) ? $_GET['etiqueta'] : '';
+        $familia = isset($_GET['familia']) ? $_GET['familia'] : '';
         $codigo_barras = isset($_GET['codigo_barras']) ? $_GET['codigo_barras'] : '';
         $codigo_producto = isset($_GET['codigo_producto']) ? $_GET['codigo_producto'] : '';
         $nombre_corto = isset($_GET['nombre_corto']) ? $_GET['nombre_corto'] : '';
@@ -468,6 +528,7 @@ class MainController {
         // Filtrar los productos
         foreach ($productos as $producto) {
             if (
+                stripos($producto['familia'], $familia) !== false &&
                 stripos($producto['etiqueta'], $etiqueta) !== false &&
                 stripos($producto['codigo_barras'], $codigo_barras) !== false &&
                 stripos($producto['codigo_producto'], $codigo_producto) !== false &&

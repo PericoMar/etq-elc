@@ -18,6 +18,7 @@
                     <th>G</th>
                     <th>H</th>
                     <th>I</th>
+                    <th>J</th>
                 </tr>
                 <tr>
                     <th>1</th>
@@ -29,6 +30,7 @@
                     <th>Diseño de Etiqueta</th>
                     <th>Precio Inicial</th>
                     <th>Precio de Venta</th>
+                    <th>Bebidas</th>
                     <th>Información Extra</th>
                 </tr>
                 <tr>
@@ -41,6 +43,7 @@
                     <td>1</td>
                     <td>15.99</td>
                     <td>24.99</td>
+                    <td>Bebidas</td>
                     <td>Color: Rojo</td>
                 </tr>
                 <tr>
@@ -53,6 +56,7 @@
                     <td>1</td>
                     <td>99.99</td>
                     <td>124.99</td>
+                    <td></td>
                     <td></td>
                 </tr>
                 <!-- Agrega más filas según sea necesario -->

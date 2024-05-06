@@ -17,7 +17,8 @@ class ExcelService
     private $indiceDisenoEtiqueta = 5;
     private $indicePrecioInicial = 6;
     private $indicePrecioVenta = 7;
-    private $indiceInformacionExtra = 8;
+    private $indiceFamilia = 8;
+    private $indiceInformacionExtra = 9;
 
     public function getProductosArchivoExcel($archivo, $tienda)
     {
@@ -59,6 +60,7 @@ class ExcelService
                         $rowData[$this->indicePrecioInicial],
                         $rowData[$this->indicePrecioVenta],
                         $rowData[$this->indiceEtiqueta],
+                        $rowData[$this->indiceFamilia],
                         $rowData[$this->indiceInformacionExtra]
                     );
 

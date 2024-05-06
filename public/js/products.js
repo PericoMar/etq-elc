@@ -135,9 +135,10 @@ botonesEditar.forEach(function(boton) {
       const nombreCorto = fila.querySelector('td:nth-child(4)').textContent;
       const nombreArticulo = fila.querySelector('td:nth-child(5)').textContent;
       const disenoId = fila.querySelector('td:nth-child(6)').textContent;
-      const precioInicial = fila.querySelector('td:nth-child(7)').textContent != 0 ? fila.querySelector('td:nth-child(6)').textContent : "";
-      const precioVenta = fila.querySelector('td:nth-child(8)').textContent != 0 ? fila.querySelector('td:nth-child(7)').textContent : "";
-      const infoExtra = fila.querySelector('td:nth-child(9)').textContent;
+      const precioInicial = fila.querySelector('td:nth-child(7)').textContent != 0 ? fila.querySelector('td:nth-child(7)').textContent : "";
+      const precioVenta = fila.querySelector('td:nth-child(8)').textContent != 0 ? fila.querySelector('td:nth-child(8)').textContent : "";
+      const familia = fila.querySelector('td:nth-child(9)').textContent;
+      const infoExtra = fila.querySelector('td:nth-child(10)').textContent;
 
       const inputHiddenAnteriorCodBarras = document.getElementById("anterior-cod-barras");
       inputHiddenAnteriorCodBarras.value = codigoBarras;
@@ -151,6 +152,7 @@ botonesEditar.forEach(function(boton) {
       document.getElementById('disenio_asociado_edit').value = disenoId;
       document.getElementById('precio_inicial_edit').value = precioInicial;
       document.getElementById('precio_venta_edit').value = precioVenta;
+      document.getElementById('familia_edit').value = familia;
       document.getElementById('info_extra_edit').value = infoExtra;
   
       // Mostrar el modal de edición
@@ -158,9 +160,7 @@ botonesEditar.forEach(function(boton) {
     });
   });
 
-
-
-
+  
 
 // Modal de confirmación de eliminación de un producto:
 
@@ -171,17 +171,23 @@ const btnEliminar = document.querySelectorAll('.btn-eliminar');
 const btnConfirmDelete = document.getElementById("confirmationDelete");
 const btnCancel = document.getElementById("cancel");
 const closeDeleteConfirmation = document.getElementById("closeDeleteConfirmation");
+
 const inputCodBarrasHidden = document.getElementById("input-cod-barras-hidden");
+const inputEtiquetaHidden = document.getElementById("input-etiqueta-hidden");
 
 btnEliminar.forEach(btn => {
     btn.addEventListener('click', function() {
         const codigoBarras = this.dataset.codigoBarras;
         const nombreArticulo = this.dataset.nombreArticulo;
+        const etiqueta = this.dataset.etiqueta;
         const spanCodBarras = document.getElementById("cod-barras");
+        const spanEtiqueta =document.getElementById("etiqueta");
         const spanNombreArt = document.getElementById("nombre-articulo");
         spanCodBarras.textContent = ` ${codigoBarras}`;
         spanNombreArt.textContent = `${nombreArticulo}`;
+        spanEtiqueta.textContent = `${etiqueta}`;
         inputCodBarrasHidden.value = codigoBarras;
+        inputEtiquetaHidden.value = etiqueta;
         showModal(deleteModal);
     });
 });

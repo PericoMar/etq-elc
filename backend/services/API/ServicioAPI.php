@@ -110,6 +110,100 @@ class ServicioAPI {
         return $response;
     }
 
+    public function updatePriceTagsByBarCode(array $productos , $tiendaID){
+        $endpoint = "/bind/updateForceByBarCodes";
+        $url = $this->baseUrl . $endpoint;
+
+        $loginCrendentials = $this->getLoginCredentials();
+
+        // Encabezados personalizados
+        $headers = array(
+            'Authorization: ' . $loginCrendentials['token'], // Encabezado de autorización.
+            'Content-type: ' . $this->contentType, // Tipo de contenido.
+            $this->language
+        );
+
+        $barCodeList = [];
+
+        foreach($productos as $producto){
+            $barCodeList[] = $producto->getCodigoBarras();    
+        }
+
+        // Datos a enviar.
+        $data = array(
+            "storeId" => $tiendaID,
+            "barCodeList" => $barCodeList
+        );
+
+        // Inicializar cURL
+        $ch = curl_init($url);
+
+        // Configurar opciones de cURL
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Especificar el tipo de solicitud (POST en este ejemplo)
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        // Configurar los datos a enviar (si es una solicitud POST)
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        // Establecer los encabezados personalizados
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        // Ejecutar la solicitud y obtener la respuesta
+        $response = curl_exec($ch);
+
+        
+        // Cerrar la conexión cURL
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function updatePriceTagByBarCode($codigo_barras , $tiendaID){
+        $endpoint = "/bind/updateForceByBarCodes";
+        $url = $this->baseUrl . $endpoint;
+
+        $loginCrendentials = $this->getLoginCredentials();
+
+        // Encabezados personalizados
+        $headers = array(
+            'Authorization: ' . $loginCrendentials['token'], // Encabezado de autorización.
+            'Content-type: ' . $this->contentType, // Tipo de contenido.
+            $this->language
+        );
+
+        // Datos a enviar.
+        $data = array(
+            "storeId" => $tiendaID,
+            "barCodeList" => [$codigo_barras]
+        );
+
+        // Inicializar cURL
+        $ch = curl_init($url);
+
+        // Configurar opciones de cURL
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Especificar el tipo de solicitud (POST en este ejemplo)
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        // Configurar los datos a enviar (si es una solicitud POST)
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        // Establecer los encabezados personalizados
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        // Ejecutar la solicitud y obtener la respuesta
+        $response = curl_exec($ch);
+
+        
+        // Cerrar la conexión cURL
+        curl_close($ch);
+
+        return $response;
+    }
+
     public function bindPriceTags(array $productos, $tiendaID){
         $endpoint = "/bind/batchBind";
         $url = $this->baseUrl . $endpoint;
@@ -338,7 +432,7 @@ class ServicioAPI {
     
         // Datos a enviar en el cuerpo de la solicitud
         $data = array(
-            "storeId" => "", // El string vacio en storeId hace que lo borre de la mercancia.
+            "storeId" => $tiendaID, // El string vacio en storeId hace que lo borre de la mercancia.
             "list" => [$codBarrasProducto]
         );
     
@@ -363,8 +457,8 @@ class ServicioAPI {
 
     }
 
-    public function unbindPriceTag($producto){
-        $endpoint = "/item/batchImportItem";
+    public function unbindPriceTag($etiqueta, $tiendaID){
+        $endpoint = "/bind/batchUnbind";
         $url = $this->baseUrl . $endpoint;
 
         $loginCrendentials = $this->getLoginCredentials();
@@ -379,8 +473,11 @@ class ServicioAPI {
         // Datos a enviar.
         $data = array(
             "storeId" => $tiendaID,
-            "itemList" => [$producto->getPriceTag()] 
+            "tagItemBinds" => [
+                array("eslBarcode" => $etiqueta)
+            ]
         );
+
 
         // Inicializar cURL
         $ch = curl_init($url);

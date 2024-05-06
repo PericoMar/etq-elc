@@ -15,7 +15,10 @@
 <body>
     <header class=nav-bar>
         <!-- Barra de navegación -->
-        <img src="<?php echo $this->baseUrl ?>/public/img/LogoKC.png" alt="Kong Consulting" class=logo>
+        <div class="logo-title">
+            <img src="<?php echo $this->baseUrl ?>/public/img/LogoKC.png" alt="Kong Consulting" class=logo>
+            <h1 class="principal-title">Gestión Etiquetas</h1>
+        </div>
 
         <nav>
             <ul>
