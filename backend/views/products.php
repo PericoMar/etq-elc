@@ -38,7 +38,16 @@
                     include $components['inform-add-modal'];
                 }
             ?>
-            
+            <?php
+                if(isset($informeDelete)){
+                    include $components['inform-delete'];
+                }
+            ?>            
+            <?php
+                if(isset($informeEdit)){
+                    include $components['inform-edit'];
+                }
+            ?>            
             <div class="filter-opt">
                 <form action="<?php echo $this->baseUrl ?>/gestion-productos/" style="margin: 0px;">
                     <button class="table-opt delete-filter">

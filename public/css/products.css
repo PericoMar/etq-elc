@@ -153,6 +153,19 @@ button.table-opt{
     font-size: xx-small;
 }
 
+.modal-content .inputs-add-excel{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90px;
+}
+
+.div-importacion-forzada{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
 .modal-header h3{
     margin:0;
 }
@@ -305,6 +318,10 @@ button:hover[disabled] {
     font-size:small;
 }
 
+.x-small{
+    font-size: x-small;
+}
+
  /* TABLA PRODUCTOS */
 table {
     margin-top: 8px;
@@ -443,6 +460,7 @@ main button{
 }
 
 .inputfile + label {
+    width: 180px;
     max-width: 80%;
     text-overflow: ellipsis;
     white-space: nowrap;

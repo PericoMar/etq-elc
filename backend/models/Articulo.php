@@ -121,6 +121,52 @@ class Articulo {
             return false;
         }
     }
+
+    public static function procesarProductosPorFuerza(&$productos , $tienda, $disenioPredeterminado){
+        $informe = [
+            'editados' => 0,
+            'añadidos' => 0,
+            'errores' => 0
+        ];
+    
+        $disenios = Diseño::getDiseniosPorTienda(new ConexionBD() , $tienda);
+        $disenios = array_column($disenios, 'id_plantilla');
+        
+        try {
+            $productosArrayLength = count($productos);
+            // Utilizar un bucle for en lugar de un bucle foreach para tener acceso a $key
+            for ($i = 0; $i < $productosArrayLength ; $i++) {
+                $producto = $productos[$i]; // Obtener el producto en la posición $i
+    
+                $disenioExcel = $producto->getDisenoId();
+                // Comprueba si el diseño existe en nuestro array de diseños, sino pone uno por defecto.
+                if(!in_array($disenioExcel, $disenios)){
+                    $producto->setDisenoId($disenioPredeterminado);
+                }
+                
+                // Verificar si el producto ya existe en la base de datos
+                if ($producto->articuloExiste()) {
+                    // Actualizar el producto existente
+                    $producto->editarArticulo();
+
+                    // Añadir el código de barras al informe de productos editados
+                    $informe['editados']++;
+                } else {
+                    $producto->aniadirArticulo();
+                    // Añadir el código de barras al informe de productos añadidos
+                    $informe['añadidos']++;
+                }
+
+            }
+    
+            return $informe;
+    
+        } catch(PDOException $e) {
+            // Manejar errores de la conexión o de la consulta
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
     
 
     public function aniadirArticulo(){

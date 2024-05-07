@@ -5,9 +5,27 @@
             <span class="close" data-modal="inform">&times;</span>
         </header>
         <main class="modal-body">
-            <p>Se han añadido <?php echo $informe['añadidos'] ?> productos.</p>
-            <p>Se han editado <?php echo $informe['editados'] ?> productos.</p>
-            <p>Han ocurrido <?php echo $informe['errores'] ?> errores. </p>
+        <p>
+            <?php if ($informe['añadidos'] == 1): ?>
+                Se ha añadido 1 producto.
+            <?php else: ?>
+                Se han añadido <?php echo $informe['añadidos']; ?> productos.
+            <?php endif; ?>
+        </p>
+        <p>
+            <?php if ($informe['editados'] == 1): ?>
+                Se ha editado 1 producto.
+            <?php else: ?>
+                Se han editado <?php echo $informe['editados']; ?> productos.
+            <?php endif; ?>
+        </p>
+        <p>
+            <?php if ($informe['errores'] == 1): ?>
+                Ha ocurrido 1 error.
+            <?php else: ?>
+                Han ocurrido <?php echo $informe['errores']; ?> errores.
+            <?php endif; ?>
+        </p>
             <?php 
                 if($informe['errores'] > 0){
                     ?><p>Posiblemente debido a etiquetas que ya estaban en uso o no están disponibles.</p><?php

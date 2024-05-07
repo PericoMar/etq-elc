@@ -62,17 +62,24 @@
             </select>
             <p>Nota: La primera fila se ignorará durante la importación.</p>
 
-            <input type="checkbox" id="importacionForzada" name="importacionForzada" checked> 
-            <label for="importacionForzada">Importación Forzada</label>
+            <div class="inputs-add-excel">
+                
+                <div class="div-importacion-forzada">
+                    <input type="checkbox" id="importacionForzada" name="importacionForzada" checked> 
+                    <label for="importacionForzada">Importación Forzada</label>
+                </div>
+                    
+                <small class="alert-msg x-small">Al seleccionar esta opción cambiará las etiquetas sin comprobar si están en uso.*</small>
 
-            <input type="file" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} archivos seleccionados" name="archivoExcel" accept=".xls,.xlsx" required/>
-            <label for="file-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-file-earmark-arrow-up" viewBox="0 0 16 16">
-                    <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707z"/>
-                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-                </svg>
-                <span class="iborrainputfile">Seleccionar archivo</span>
-            </label>
+                <input type="file" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} archivos seleccionados" name="archivoExcel" accept=".xls,.xlsx" required/>
+                <label for="file-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-file-earmark-arrow-up" viewBox="0 0 16 16">
+                        <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707z"/>
+                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                    </svg>
+                    <span class="iborrainputfile">Seleccionar archivo</span>
+                </label>
+            </div>
         </main>
         <footer class="modal-footer">
             <button data-modal="add-excel" class="btn-cancel" type=button >Cancelar</button>

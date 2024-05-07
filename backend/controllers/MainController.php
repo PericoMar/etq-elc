@@ -142,6 +142,8 @@ class MainController {
             'first-import-modal' => 'backend/views/components/productsPage/firstImportModal.php',
             'inform-modal' => 'backend/views/components/productsPage/informModal.php',
             'inform-add-modal' => 'backend/views/components/productsPage/informAddModal.php',
+            'inform-edit' => 'backend/views/components/productsPage/informEdit.php',
+            'inform-delete' => 'backend/views/components/productsPage/informDelete.php',
             'filter-modal' => 'backend/views/components/productsPage/filterModal.php',
             'add-modal' => 'backend/views/components/productsPage/addModal.php',
             'add-excel-modal' => 'backend/views/components/productsPage/addExcelModal.php',
@@ -165,6 +167,16 @@ class MainController {
         if(isset($_SESSION['informe'])){
             $informe= $_SESSION['informe'];
             unset($_SESSION['informe']);
+        }
+
+        if(isset($_SESSION['informDelete'])){
+            $informeDelete= $_SESSION['informDelete'];
+            unset($_SESSION['informDelete']);
+        }
+
+        if(isset($_SESSION['informEdit'])){
+            $informeEdit = $_SESSION['informEdit'];
+            unset($_SESSION['informEdit']);
         }
         
 
@@ -270,7 +282,11 @@ class MainController {
                             $productosExcel = $excelService->getProductosArchivoExcel($rutaTemporal, $tiendaId);
                             if($productosExcel){
                                 
-                                $informeNuevo = Articulo::procesarProductos($productosExcel, $tiendaId, $disenioPredeterminado);
+                                if(isset($_POST['importacionForzada'])){
+                                    $informeNuevo = Articulo::procesarProductosPorFuerza($productosExcel, $tiendaId, $disenioPredeterminado);    
+                                } else {
+                                    $informeNuevo = Articulo::procesarProductos($productosExcel, $tiendaId, $disenioPredeterminado);    
+                                }
 
                                 // $response = $apiService->batchBindInBatches($productosExcel , $tiendaId);
                                 $apiService->importProducts($productosExcel, $tiendaId);
@@ -324,6 +340,10 @@ class MainController {
 
                 $response = $apiService->deleteProduct($codigo_barras, $tiendaId);
 
+                $_SESSION['informDelete'] = true;
+
+                header("Location: /etq-elc/gestion-productos/");
+                exit();
                 // No se si puedo reiniciar la etiqueta porque ya no esta conectada a un BarCode.
                 // $response = $apiService->updatePriceTagByBarCode($articulo->getCodigoBarras(), $tiendaId);
             }
@@ -359,9 +379,16 @@ class MainController {
                             $response = $apiService->bindPriceTag($articulo, $tiendaId);
 
                             $response = $apiService->updatePriceTagByBarCode($articulo->getCodigoBarras(), $tiendaId);
+
+                            $_SESSION['informEdit'] = true;
+
+                            header("Location: /etq-elc/gestion-productos/");
+                            exit();
+
                         } else {
                             $mensaje = "Ya existe un articulo con ese codigo de barras.";
                         }
+                    // Si el Cod. Barras era el mismo se cambia directamente.
                     } else {
                         Articulo::borrarArticulo($anteriorCodBarras);
                         $articulo->aniadirArticulo();
@@ -371,6 +398,11 @@ class MainController {
                         $response = $apiService->bindPriceTag($articulo, $tiendaId);
 
                         $response = $apiService->updatePriceTagByBarCode($articulo->getCodigoBarras(), $tiendaId);
+
+                        $_SESSION['informEdit'] = true;
+
+                        header("Location: /etq-elc/gestion-productos/");
+                        exit();
                     }
                 }
                 
