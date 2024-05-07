@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap" rel="stylesheet">
-
+    <link rel="icon" type="image/png" href="<?php echo $this->baseUrl ?>/public/img/favicon.png">
 </head>
 <body>
     <header class=nav-bar>
