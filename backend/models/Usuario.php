@@ -92,7 +92,7 @@ class Usuario {
             $conn = $this->conexionBD->getConexion();
 
             // Preparar la consulta SQL para verificar las credenciales
-            $query = "SELECT nombre FROM Usuarios WHERE nombre = :nombre AND passwd = :passwd";
+            $query = "SELECT nombre FROM Usuarios WHERE nombre = :nombre AND pass = :passwd";
             $stmt = $conn->prepare($query);
             $stmt->bindParam(':nombre', $this->nombre);
             $stmt->bindParam(':passwd', $this->passwd);
@@ -117,7 +117,7 @@ class Usuario {
             $sql = "SELECT Tiendas.nombre_tienda AS nombre_tienda, Tiendas.store_id AS tienda_id
             FROM Usuarios_Tiendas
             JOIN Tiendas ON Usuarios_Tiendas.store_id = Tiendas.store_id
-            WHERE Usuarios_Tiendas.usuario_nombre = :nombre;
+            WHERE Usuarios_Tiendas.usuario_nombre = :nombre
             ";
         
             // Preparar y ejecutar la consulta
@@ -142,12 +142,13 @@ class Usuario {
         
             // Sentencia SQL para obtener todas las tiendas con los nombres de los usuarios asociados
             $sql = "SELECT DISTINCT usuario_nombre as nombre_usuario FROM Usuarios_Tiendas WHERE store_id IN
-            (SELECT store_id FROM Usuarios_Tiendas WHERE usuario_nombre = :nombre) AND usuario_nombre != :nombre;
+            (SELECT store_id FROM Usuarios_Tiendas WHERE usuario_nombre = :nombre) AND usuario_nombre != :nombre2
             ";
         
             // Preparar y ejecutar la consulta
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':nombre' , $this->nombre);
+            $stmt->bindParam(':nombre2' , $this->nombre);
             $stmt->execute();
         
             $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -163,7 +164,7 @@ class Usuario {
         
         } catch(PDOException $e) {
             // Manejar errores de la conexión o de la consulta
-            echo "Error: " . $e->getMessage();
+            echo "Error SQL: " . $e->getMessage();
             return false;
         }   
     }
@@ -278,7 +279,7 @@ class Usuario {
             $conn = $this->conexionBD->getConexion();
     
             // Preparar la consulta SQL para insertar un nuevo usuario
-            $query = "INSERT INTO Usuarios (nombre, passwd, rol) VALUES (:nombre, :passwd, :rol)";
+            $query = "INSERT INTO Usuarios (nombre, pass, rol) VALUES (:nombre, :passwd, :rol)";
             $stmt = $conn->prepare($query);
             $stmt->bindParam(':nombre', $this->nombre);
             $stmt->bindParam(':passwd', $this->passwd);

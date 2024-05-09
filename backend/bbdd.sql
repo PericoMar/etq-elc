@@ -1,5 +1,5 @@
     -- CREAR BASE DE DATOS
-    CREATE DATABASE etiquetas;
+    CREATE DATABASE ETIQUETAS_ELECTRONICAS;
     USE etiquetas;
 
     -- CREAR USUARIO
@@ -8,7 +8,7 @@
 
 CREATE TABLE Usuarios (
     nombre VARCHAR(255) PRIMARY KEY,
-    passwd VARCHAR(255), 
+    pass VARCHAR(255), 
     email VARCHAR(255),
     rol VARCHAR(50) CHECK (rol IN ('Administrador', 'Gestor', 'Usuario'))
 );
@@ -62,7 +62,7 @@ CREATE TABLE Articulos (
 
 
     -- Insertar datos en la tabla Usuarios
-    INSERT INTO Usuarios (nombre, passwd, email, rol)
+    INSERT INTO Usuarios (nombre, pass , email, rol)
     VALUES
         ('usuario1', 'contraseña1', 'usuario1@example.com', 'Usuario'),
         ('usuario2', 'contraseña2', 'usuario2@example.com', 'Usuario'),

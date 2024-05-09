@@ -175,6 +175,9 @@ class Articulo {
                 $conexionBD = new ConexionBD();
                 $conn = $conexionBD->getConexion();
                 
+                $nuevoPrecioInicial = floatval($this->precioInicial);
+                $nuevoPrecioVenta = floatval($this->precioVenta);
+
                 // Sentencia SQL para insertar un nuevo artículo
                 $sql = "INSERT INTO Articulos (codigo_barras, store_id, id_plantilla, codigo_producto, nombre_corto, nombre_articulo, precio_inicial, precio_venta, etiqueta, familia, info_extra) 
                         VALUES (:codigo_barras, :tienda_id, :diseno_id, :codigo_producto, :nombre_corto, :nombre_articulo, :precio_inicial, :precio_venta,:etiqueta, :familia,  :info_extra)";
@@ -187,8 +190,8 @@ class Articulo {
                 $stmt->bindParam(':codigo_producto', $this->codigoProducto);
                 $stmt->bindParam(':nombre_corto', $this->nombreCorto);
                 $stmt->bindParam(':nombre_articulo', $this->nombreArticulo);
-                $stmt->bindParam(':precio_inicial', $this->precioInicial);
-                $stmt->bindParam(':precio_venta', $this->precioVenta);
+                $stmt->bindParam(':precio_inicial', $nuevoPrecioInicial);
+                $stmt->bindParam(':precio_venta', $nuevoPrecioVenta);
                 $stmt->bindParam(':etiqueta' , $this->etiqueta);
                 $stmt->bindParam(':familia' , $this->familia);
                 $stmt->bindParam(':info_extra', $this->infoExtra);

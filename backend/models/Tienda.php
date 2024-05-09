@@ -69,29 +69,34 @@ class Tienda {
             return false;
         }
     }
-
     public function tieneArticulosAsociados(){
         try {
             $conn = $this->conexionBD->getConexion();
     
             // Consulta SQL para verificar si hay artículos asociados a la tienda con etiquetas asignadas
-            $sql = "SELECT codigo_barras FROM Articulos WHERE store_id = :id;";
+            $sql = "SELECT codigo_barras FROM Articulos WHERE store_id = :id";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':id', $this->id);
             $stmt->execute();
             
-            // Obtener el número de filas afectadas
-            $count = $stmt->rowCount();
+            // Obtener una fila de resultados como una matriz asociativa
+            $articulo = $stmt->fetch(PDO::FETCH_ASSOC);
     
-            // Si se encontraron artículos con etiquetas asociadas, devolver true, de lo contrario false
-            return $count > 0;
+            // Verificar si se encontró algún artículo asociado
+            if($articulo !== false) {
+                // Hay al menos un artículo asociado
+                return true;
+            } else {
+                // No se encontraron artículos asociados
+                return false;
+            }
+            
         } catch(PDOException $e) {
             // Manejar errores de la conexión o de la consulta
             echo "Error: " . $e->getMessage();
             return false;
         }
     }
-    
     
     
 
