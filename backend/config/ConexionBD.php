@@ -1,7 +1,7 @@
 <?php
 class ConexionBD {
     private $servername = "85.215.191.245";
-    private $username = "Hugo";
+    private $username = "Kong";
     private $password = "SQLKong1972.";
     private $dbname = "ETIQUETAS_ELECTRONICAS";
     private $conn;
